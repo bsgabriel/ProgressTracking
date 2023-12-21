@@ -1,0 +1,60 @@
+package com.progress.tracking.util.wrapper;
+
+import com.google.gson.Gson;
+import com.progress.tracking.response.trello.Board;
+import com.progress.tracking.response.trello.TrelloSearchResponse;
+import com.progress.tracking.util.WsUtil;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class TrelloApiWrapper {
+    private static final String BASE_URL = "https://api.trello.com/1/";
+    private static final Gson gson = new Gson();
+    private String apiKey;
+    private String apiToken;
+
+    private TrelloApiWrapper() {
+    }
+
+    /**
+     * Initializes the wrapper
+     *
+     * @param apiKey
+     * @param apiToken
+     * @return instance of the wrapper
+     */
+    public static TrelloApiWrapper initialize(String apiKey, String apiToken) {
+        // TODO throw exception if there's no key or token
+        TrelloApiWrapper wrapper = new TrelloApiWrapper();
+        wrapper.apiKey = apiKey;
+        wrapper.apiToken = apiToken;
+        return wrapper;
+    }
+
+    private Map<String, String> createHeader() {
+        Map header = new HashMap();
+        header.put("Content-Type", "application/json");
+        return header;
+    }
+
+    public List<Board> searchBoardByName(String boardName) {
+        final String url = BASE_URL + "search";
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("key", apiKey);
+        params.put("token", apiToken);
+        params.put("query", boardName);
+
+        final String jsonResponse;
+        try {
+            jsonResponse = WsUtil.sendGet(url, createHeader(), params);
+        } catch (Exception e) {
+            // TODO log
+            throw new RuntimeException(e);
+        }
+
+        return gson.fromJson(jsonResponse, TrelloSearchResponse.class).getBoards();
+    }
+}
