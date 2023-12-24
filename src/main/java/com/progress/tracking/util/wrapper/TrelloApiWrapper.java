@@ -1,10 +1,14 @@
 package com.progress.tracking.util.wrapper;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.progress.tracking.response.trello.Board;
+import com.progress.tracking.response.trello.TrelloList;
 import com.progress.tracking.response.trello.TrelloSearchResponse;
 import com.progress.tracking.util.WsUtil;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,4 +61,25 @@ public class TrelloApiWrapper {
 
         return gson.fromJson(jsonResponse, TrelloSearchResponse.class).getBoards();
     }
+
+    public List<TrelloList> getListsFromBoard(final String boardId) {
+        final String url = BASE_URL + "boards/" + boardId + "/lists";
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("key", apiKey);
+        params.put("token", apiToken);
+
+        final String jsonResponse;
+        try {
+            jsonResponse = WsUtil.sendGet(url, createHeader(), params);
+        } catch (Exception e) {
+            // TODO log
+            throw new RuntimeException(e);
+        }
+
+        final Type listType = new TypeToken<ArrayList<TrelloList>>() {
+        }.getType();
+        return gson.fromJson(jsonResponse, listType);
+    }
+
 }
