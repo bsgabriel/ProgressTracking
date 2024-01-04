@@ -2,10 +2,7 @@ package com.progress.tracking.util.wrapper;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.progress.tracking.response.trello.Board;
-import com.progress.tracking.response.trello.CreateBoardRequest;
-import com.progress.tracking.response.trello.TrelloList;
-import com.progress.tracking.response.trello.TrelloSearchResponse;
+import com.progress.tracking.response.trello.*;
 import com.progress.tracking.util.WsUtil;
 
 import java.lang.reflect.Type;
@@ -104,6 +101,26 @@ public class TrelloApiWrapper {
         }
 
         return gson.fromJson(jsonResponse, Board.class);
+    }
+
+    public TrelloList createList(final String idBoard, final String name) {
+        // TODO throw exception if there's no name or idBoard
+        final String url = BASE_URL + "list/";
+        CreateListRequest req = new CreateListRequest();
+        req.setName(name);
+        req.setIdBoard(idBoard);
+        req.setApiToken(apiToken);
+        req.setApiKey(apiKey);
+
+        final String jsonResponse;
+        try {
+            jsonResponse = WsUtil.sendPost(url, createHeader(), gson.toJson(req));
+        } catch (Exception e) {
+            // TODO log
+            throw new RuntimeException(e);
+        }
+
+        return gson.fromJson(jsonResponse, TrelloList.class);
     }
 
 
