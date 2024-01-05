@@ -144,5 +144,25 @@ public class TrelloApiWrapper {
         return gson.fromJson(jsonResponse, Card.class);
     }
 
+    public Checklist createChecklist(final String idCard, final String name) {
+        // TODO throw exception if there's no name or idCard
+
+        final String url = BASE_URL + "checklists";
+        final CreateChecklistRequest req = new CreateChecklistRequest();
+        req.setIdCard(idCard);
+        req.setName(name);
+        req.setApiKey(apiKey);
+        req.setApiToken(apiToken);
+
+        final String jsonResponse;
+        try {
+            jsonResponse = WsUtil.sendPost(url, createHeader(), gson.toJson(req));
+        } catch (Exception e) {
+            // TODO log
+            throw new RuntimeException(e);
+        }
+
+        return gson.fromJson(jsonResponse, Checklist.class);
+    }
 
 }
