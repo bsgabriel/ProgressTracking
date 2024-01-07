@@ -184,4 +184,23 @@ public class TrelloApiWrapper {
         return gson.fromJson(jsonResponse, ChecklistItem.class);
     }
 
+    public CardAttachment createCardAttachment(final String idCard, final String name, final String url) {
+        // TODO throw exception if there's no idCard
+        final String urlReq = BASE_URL + "cards/" + idCard + "/attachments";
+        final CreateCardAttachmentRequest req = new CreateCardAttachmentRequest();
+        req.setName(name);
+        req.setUrl(url);
+        req.setKey(apiKey);
+        req.setToken(apiToken);
+
+        final String jsonResponse;
+        try {
+            jsonResponse = WsUtil.sendPost(urlReq, createHeader(), gson.toJson(req));
+        } catch (Exception e) {
+            // TODO log
+            throw new RuntimeException(e);
+        }
+
+        return gson.fromJson(jsonResponse, CardAttachment.class);
+    }
 }
