@@ -1,6 +1,6 @@
 package com.progress.tracking.entity;
 
-import com.progress.tracking.response.udemy.VisibleInstructor;
+import com.progress.tracking.wrapper.udemy.pojo.VisibleInstructor;
 
 import java.util.ArrayList;
 import java.util.List;

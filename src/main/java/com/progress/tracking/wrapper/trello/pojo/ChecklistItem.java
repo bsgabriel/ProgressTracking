@@ -1,4 +1,4 @@
-package com.progress.tracking.response.trello;
+package com.progress.tracking.wrapper.trello.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

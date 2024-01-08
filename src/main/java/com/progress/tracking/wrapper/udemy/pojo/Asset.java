@@ -1,5 +1,5 @@
 
-package com.progress.tracking.response.udemy;
+package com.progress.tracking.wrapper.udemy.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

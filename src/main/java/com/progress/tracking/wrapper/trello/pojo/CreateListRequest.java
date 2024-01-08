@@ -1,17 +1,17 @@
-package com.progress.tracking.response.trello;
+package com.progress.tracking.wrapper.trello.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CreateChecklistRequest {
-
-    @SerializedName("idCard")
-    @Expose
-    private String idCard;
+public class CreateListRequest {
 
     @SerializedName("name")
     @Expose
     private String name;
+
+    @SerializedName("idBoard")
+    @Expose
+    private String idBoard;
 
     @SerializedName("key")
     @Expose
@@ -21,20 +21,20 @@ public class CreateChecklistRequest {
     @Expose
     private String apiToken;
 
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIdBoard() {
+        return idBoard;
+    }
+
+    public void setIdBoard(String idBoard) {
+        this.idBoard = idBoard;
     }
 
     public String getApiKey() {

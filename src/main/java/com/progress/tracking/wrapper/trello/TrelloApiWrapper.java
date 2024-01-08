@@ -1,9 +1,9 @@
-package com.progress.tracking.util.wrapper;
+package com.progress.tracking.wrapper.trello;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.progress.tracking.response.trello.*;
 import com.progress.tracking.util.WsUtil;
+import com.progress.tracking.wrapper.trello.pojo.*;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

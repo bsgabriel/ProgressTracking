@@ -1,10 +1,10 @@
-package com.progress.tracking.util.wrapper;
+package com.progress.tracking.wrapper.udemy;
 
 import com.google.gson.Gson;
 import com.progress.tracking.entity.UdemyCourse;
 import com.progress.tracking.entity.UdemyCourseCurriculum;
-import com.progress.tracking.response.udemy.Result;
-import com.progress.tracking.response.udemy.UdemyResponse;
+import com.progress.tracking.wrapper.udemy.pojo.Result;
+import com.progress.tracking.wrapper.udemy.pojo.UdemyResponse;
 import com.progress.tracking.util.WsUtil;
 
 import java.util.*;

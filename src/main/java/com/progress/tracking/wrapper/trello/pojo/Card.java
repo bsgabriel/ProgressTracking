@@ -1,10 +1,9 @@
-package com.progress.tracking.response.trello;
+package com.progress.tracking.wrapper.trello.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Board {
-
+public class Card {
     @SerializedName("id")
     @Expose
     private String id;
@@ -15,15 +14,15 @@ public class Board {
 
     @SerializedName("desc")
     @Expose
-    private String desc;
+    private String description;
 
-    @SerializedName("closed")
+    @SerializedName("idBoard")
     @Expose
-    private boolean closed;
+    private String idBoard;
 
-    @SerializedName("idOrganization")
+    @SerializedName("idList")
     @Expose
-    private String idOrganization;
+    private String idList;
 
     @SerializedName("url")
     @Expose
@@ -49,28 +48,28 @@ public class Board {
         this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public boolean getClosed() {
-        return closed;
+    public String getIdBoard() {
+        return idBoard;
     }
 
-    public void setClosed(boolean closed) {
-        this.closed = closed;
+    public void setIdBoard(String idBoard) {
+        this.idBoard = idBoard;
     }
 
-    public String getIdOrganization() {
-        return idOrganization;
+    public String getIdList() {
+        return idList;
     }
 
-    public void setIdOrganization(String idOrganization) {
-        this.idOrganization = idOrganization;
+    public void setIdList(String idList) {
+        this.idList = idList;
     }
 
     public String getUrl() {
@@ -88,5 +87,4 @@ public class Board {
     public void setShortUrl(String shortUrl) {
         this.shortUrl = shortUrl;
     }
-
 }

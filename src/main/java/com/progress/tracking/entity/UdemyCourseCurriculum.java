@@ -1,6 +1,6 @@
 package com.progress.tracking.entity;
 
-import com.progress.tracking.response.udemy.Result;
+import com.progress.tracking.wrapper.udemy.pojo.Result;
 
 import java.util.LinkedHashMap;
 import java.util.List;
