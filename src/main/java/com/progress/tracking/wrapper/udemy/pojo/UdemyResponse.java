@@ -1,27 +1,13 @@
 package com.progress.tracking.wrapper.udemy.pojo;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class UdemyResponse {
 
-    @SerializedName("count")
-    @Expose
     private Integer count;
-
-    @SerializedName("next")
-    @Expose
     private String next;
-
-    @SerializedName("previous")
-    @Expose
     private String previous;
-
-    @SerializedName("results")
-    @Expose
     private List<Result> results;
 
     public Integer getCount() {
