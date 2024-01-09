@@ -63,7 +63,7 @@ public class WsUtil {
         connection.setDoOutput(true);
 
         try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
-            wr.writeBytes(json);
+            wr.write(json.getBytes("UTF-8"));
             wr.flush();
         }
 
