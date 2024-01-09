@@ -3,12 +3,16 @@ package com.progress.tracking.wrapper.udemy;
 import com.google.gson.Gson;
 import com.progress.tracking.entity.UdemyCourse;
 import com.progress.tracking.entity.UdemyCourseCurriculum;
+import com.progress.tracking.util.WsUtil;
 import com.progress.tracking.wrapper.udemy.pojo.Result;
 import com.progress.tracking.wrapper.udemy.pojo.UdemyResponse;
-import com.progress.tracking.util.WsUtil;
 
 import java.util.*;
 
+/**
+ * UdemyApiWrapper is a utility class for interacting with the Udemy API to retrieve course information.
+ * For more details on the Udemy API, refer to the <a href="https://www.udemy.com/developers/affiliate/">official documentation</a>.
+ */
 public class UdemyApiWrapper {
     private static final String BASE_URL = "https://www.udemy.com/api-2.0/courses/";
     private static final Gson gson = new Gson();
@@ -20,9 +24,9 @@ public class UdemyApiWrapper {
     /**
      * Initializes the Wrapper, generating the token with the provided information.
      *
-     * @param clientID
-     * @param clientSecret
-     * @return
+     * @param clientID     Udemy API client ID
+     * @param clientSecret Udemy API client secret
+     * @return UdemyApiWrapper instance
      */
     public static UdemyApiWrapper initialize(String clientID, String clientSecret) {
         UdemyApiWrapper wrapper = new UdemyApiWrapper();
@@ -31,6 +35,11 @@ public class UdemyApiWrapper {
         return wrapper;
     }
 
+    /**
+     * Creates the header with the necessary authorization information.
+     *
+     * @return Map representing the HTTP headers
+     */
     private Map<String, String> createHeader() {
         Map<String, String> header = new HashMap<>();
         header.put("Authorization", "Basic " + token);
@@ -38,6 +47,12 @@ public class UdemyApiWrapper {
         return header;
     }
 
+    /**
+     * Searches for Udemy courses based on the provided search string.
+     *
+     * @param search Search string for courses
+     * @return List of UdemyCourse objects matching the search
+     */
     public List<UdemyCourse> searchCourse(String search) {
         String jsonResponse;
 
@@ -70,6 +85,12 @@ public class UdemyApiWrapper {
         return courses;
     }
 
+    /**
+     * Retrieves the curriculum of a Udemy course based on the provided course ID.
+     *
+     * @param courseID Udemy course ID
+     * @return UdemyCourseCurriculum object representing the course curriculum
+     */
     public UdemyCourseCurriculum getCourseCurriculum(Long courseID) {
         // TODO: throw exception if token is null
         // TODO: throw exception if courseID is null
@@ -110,6 +131,12 @@ public class UdemyApiWrapper {
         return course;
     }
 
+    /**
+     * Converts a list of Udemy API results into a map representing chapters and their corresponding lectures.
+     *
+     * @param allResults List of Udemy API results
+     * @return Map representing chapters and lectures
+     */
     private Map<Result, List<Result>> fromResultListToMap(List<Result> allResults) {
         Map<Result, List<Result>> chapterLecturesMap = new LinkedHashMap<>();
 
@@ -132,6 +159,13 @@ public class UdemyApiWrapper {
         return chapterLecturesMap;
     }
 
+    /**
+     * Finds the chapter corresponding to a given lecture within a list of Udemy API results.
+     *
+     * @param allResults List of Udemy API results
+     * @param lecture    Udemy API result representing a lecture
+     * @return Udemy API result representing the corresponding chapter
+     */
     private static Result findChapter(List<Result> allResults, Result lecture) {
         Result foundChapter = null;
         int minSortOrderDifference = Integer.MAX_VALUE;
@@ -148,5 +182,4 @@ public class UdemyApiWrapper {
 
         return foundChapter;
     }
-
 }
