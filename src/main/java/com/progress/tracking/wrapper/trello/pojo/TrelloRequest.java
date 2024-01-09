@@ -1,37 +1,26 @@
 package com.progress.tracking.wrapper.trello.pojo;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CreateBoardRequest {
+public class TrelloRequest {
 
-    @SerializedName("name")
-    @Expose
     private String name;
-
-    @SerializedName("desc")
-    @Expose
-    private String desc;
-
-    @SerializedName("idOrganization")
-    @Expose
     private String idOrganization;
-
-    @SerializedName("defaultLists")
-    @Expose
+    private String idBoard;
+    private String idList;
+    private String idCard;
     private boolean defaultLists;
-
-    @SerializedName("defaultLabels")
-    @Expose
     private boolean defaultLabels;
+    private String url;
 
     @SerializedName("token")
-    @Expose
     private String apiToken;
 
     @SerializedName("key")
-    @Expose
     private String apiKey;
+
+    @SerializedName("desc")
+    private String description;
 
     public String getName() {
         return name;
@@ -41,20 +30,36 @@ public class CreateBoardRequest {
         this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
     public String getIdOrganization() {
         return idOrganization;
     }
 
     public void setIdOrganization(String idOrganization) {
         this.idOrganization = idOrganization;
+    }
+
+    public String getIdBoard() {
+        return idBoard;
+    }
+
+    public void setIdBoard(String idBoard) {
+        this.idBoard = idBoard;
+    }
+
+    public String getIdList() {
+        return idList;
+    }
+
+    public void setIdList(String idList) {
+        this.idList = idList;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 
     public boolean isDefaultLists() {
@@ -73,6 +78,14 @@ public class CreateBoardRequest {
         this.defaultLabels = defaultLabels;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public String getApiToken() {
         return apiToken;
     }
@@ -87,5 +100,13 @@ public class CreateBoardRequest {
 
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

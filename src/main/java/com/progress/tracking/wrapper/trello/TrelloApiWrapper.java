@@ -84,9 +84,9 @@ public class TrelloApiWrapper {
     public Board createBoard(final String boardName, final String desc) {
         // TODO throw exception if there's no boardName
         final String url = BASE_URL + "boards/";
-        CreateBoardRequest req = new CreateBoardRequest();
+        TrelloRequest req = new TrelloRequest();
         req.setName(boardName);
-        req.setDesc(desc);
+        req.setDescription(desc);
         req.setDefaultLists(false);
         req.setDefaultLabels(false);
         req.setApiKey(apiKey);
@@ -106,7 +106,7 @@ public class TrelloApiWrapper {
     public TrelloList createList(final String idBoard, final String name) {
         // TODO throw exception if there's no name or idBoard
         final String url = BASE_URL + "list/";
-        CreateListRequest req = new CreateListRequest();
+        TrelloRequest req = new TrelloRequest();
         req.setName(name);
         req.setIdBoard(idBoard);
         req.setApiToken(apiToken);
@@ -126,7 +126,7 @@ public class TrelloApiWrapper {
     public Card createCard(final String idList, final String name, final String desc) {
         // TODO throw exception if there's no name or idList
         final String url = BASE_URL + "cards/";
-        final CreateCardRequest req = new CreateCardRequest();
+        final TrelloRequest req = new TrelloRequest();
         req.setName(name);
         req.setDescription(desc);
         req.setIdList(idList);
@@ -148,7 +148,7 @@ public class TrelloApiWrapper {
         // TODO throw exception if there's no name or idCard
 
         final String url = BASE_URL + "checklists";
-        final CreateChecklistRequest req = new CreateChecklistRequest();
+        final TrelloRequest req = new TrelloRequest();
         req.setIdCard(idCard);
         req.setName(name);
         req.setApiKey(apiKey);
@@ -168,7 +168,7 @@ public class TrelloApiWrapper {
     public ChecklistItem createChecklistItem(final String idChecklist, final String name) {
         // TODO throw exception if there's no name or idCard
         final String url = BASE_URL + "checklists/" + idChecklist + "/checkItems/";
-        final CreateChecklistItemRequest req = new CreateChecklistItemRequest();
+        final TrelloRequest req = new TrelloRequest();
         req.setName(name);
         req.setApiKey(apiKey);
         req.setApiToken(apiToken);
@@ -187,11 +187,11 @@ public class TrelloApiWrapper {
     public CardAttachment createCardAttachment(final String idCard, final String name, final String url) {
         // TODO throw exception if there's no idCard
         final String urlReq = BASE_URL + "cards/" + idCard + "/attachments";
-        final CreateCardAttachmentRequest req = new CreateCardAttachmentRequest();
+        final TrelloRequest req = new TrelloRequest();
         req.setName(name);
         req.setUrl(url);
-        req.setKey(apiKey);
-        req.setToken(apiToken);
+        req.setApiKey(apiKey);
+        req.setApiToken(apiToken);
 
         final String jsonResponse;
         try {
