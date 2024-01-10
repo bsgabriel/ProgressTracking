@@ -45,7 +45,7 @@ public class TrelloApiWrapper {
      * @return Map representing the HTTP headers
      */
     private Map<String, String> createHeader() {
-        Map header = new HashMap();
+        final Map<String, String> header = new HashMap<>();
         header.put("Content-Type", "application/json");
         return header;
     }
