@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.progress.tracking.entity.UdemyCourse;
 import com.progress.tracking.entity.UdemyCourseCurriculum;
 import com.progress.tracking.util.WsUtil;
+import com.progress.tracking.util.exception.ApiExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.wrapper.udemy.pojo.Result;
 import com.progress.tracking.wrapper.udemy.pojo.UdemyResponse;
@@ -58,12 +59,14 @@ public class UdemyApiWrapper {
     /**
      * Searches for Udemy courses based on the provided search string.
      *
-     * @param search Search string for courses.
+     * @param search   Search string for courses.
+     * @param pageSize The page size for the search results.
      * @return List of UdemyCourse objects matching the search.
      * @throws InvalidParameterException If the search string is null or blank.
      * @throws InvalidParameterException If the page size is null or less than 5.
+     * @throws ApiExecutionException     If an error occurs during the API call.
      */
-    public List<UdemyCourse> searchCourse(final String search, final Integer pageSize) throws InvalidParameterException {
+    public List<UdemyCourse> searchCourse(final String search, final Integer pageSize) throws InvalidParameterException, ApiExecutionException {
         if (search == null || search.isBlank())
             throw new InvalidParameterException("search");
 
@@ -75,17 +78,12 @@ public class UdemyApiWrapper {
         query.put("page_size", pageSize.toString());
         query.put("search", search);
 
-        final String jsonResponse;
-
+        final UdemyResponse response;
         try {
-            jsonResponse = WsUtil.sendGet(BASE_URL, createHeader(), query);
+            response = sendRequest(BASE_URL, query);
         } catch (Exception e) {
-            // TODO: log
-            e.printStackTrace();
-            return courses;
+            throw new ApiExecutionException("An error occurred while searching for the specified course.", e);
         }
-
-        final UdemyResponse response = gson.fromJson(jsonResponse, UdemyResponse.class);
 
         for (final Result result : response.getResults()) {
             final UdemyCourse course = new UdemyCourse();
@@ -104,48 +102,45 @@ public class UdemyApiWrapper {
      * Retrieves the curriculum of a Udemy course based on the provided course ID.
      *
      * @param courseID Udemy course ID.
+     * @param pageSize The page size for the search results.
      * @return UdemyCourseCurriculum object representing the course curriculum.
      * @throws InvalidParameterException If the course ID is null.
      * @throws InvalidParameterException If the page size is null or less than 5.
+     * @throws ApiExecutionException     If an error occurs during the API call.
      */
-    public UdemyCourseCurriculum getCourseCurriculum(final Long courseID, final Integer pageSize) throws InvalidParameterException {
+    public UdemyCourseCurriculum getCourseCurriculum(final Long courseID, final Integer pageSize) throws InvalidParameterException, ApiExecutionException {
         if (courseID == null)
             throw new InvalidParameterException("courseID");
 
         if (pageSize == null || pageSize < 5)
             throw new InvalidParameterException("pageSize", "The value of 'pageSize' must not be null and must be greater than or equal to 5");
 
-        final String url = BASE_URL + courseID + "/public-curriculum-items/";
+        final List<Result> results = new ArrayList<>();
         final Map<String, String> query = new HashMap<>();
         query.put("page_size", pageSize.toString());
 
-        String jsonResponse;
+        String url = BASE_URL + courseID + "/public-curriculum-items/";
 
-        try {
-            jsonResponse = WsUtil.sendGet(url, createHeader(), query);
-        } catch (Exception e) {
-            // TODO: log
-            e.printStackTrace();
-            return null;
-        }
-
-        UdemyResponse response = gson.fromJson(jsonResponse, UdemyResponse.class);
-
-        List<Result> results = new ArrayList<>(response.getResults());
-
-        while (response.getNext() != null && !response.getNext().trim().isBlank()) {
+        do {
+            final UdemyResponse response;
             try {
-                jsonResponse = WsUtil.sendGet(response.getNext(), createHeader(), null);
+                response = sendRequest(url, query);
             } catch (Exception e) {
-                // TODO: log
-                e.printStackTrace();
-                return null;
+                throw new ApiExecutionException("An error occurred while searching for the curriculum for the specified course.", e);
             }
-            response = gson.fromJson(jsonResponse, UdemyResponse.class);
-            results.addAll(response.getResults());
-        }
 
-        UdemyCourseCurriculum course = new UdemyCourseCurriculum();
+            if (response == null)
+                throw new ApiExecutionException("Couldn't get a valid response while searching for course curriculum.");
+
+            results.addAll(response.getResults());
+
+            // Remove the "page_size" parameter from the query to prevent continuous concatenation.
+            query.remove("page_size");
+
+            url = response.getNext();
+        } while (url != null && !url.trim().isEmpty());
+
+        final UdemyCourseCurriculum course = new UdemyCourseCurriculum();
         course.setChapters(fromResultListToMap(results));
         return course;
     }
@@ -201,4 +196,18 @@ public class UdemyApiWrapper {
 
         return foundChapter;
     }
+
+    /**
+     * Sends an HTTP GET request to the specified URL with the provided query parameters and retrieves the UdemyResponse.
+     *
+     * @param url   The URL to send the request to.
+     * @param query The query parameters to include in the request.
+     * @return The {@link UdemyResponse} object representing the API response.
+     * @throws Exception If an error occurs during the HTTP GET request or JSON deserialization.
+     */
+    private UdemyResponse sendRequest(final String url, final Map<String, String> query) throws Exception {
+        final String jsonResponse = WsUtil.sendGet(url, createHeader(), query);
+        return gson.fromJson(jsonResponse, UdemyResponse.class);
+    }
+
 }
