@@ -151,11 +151,11 @@ public class UdemyApiWrapper {
      * @param allResults List of Udemy API results
      * @return Map representing chapters and lectures
      */
-    private Map<Result, List<Result>> fromResultListToMap(List<Result> allResults) {
-        Map<Result, List<Result>> chapterLecturesMap = new LinkedHashMap<>();
+    private Map<Result, List<Result>> fromResultListToMap(final List<Result> allResults) {
+        final Map<Result, List<Result>> chapterLecturesMap = new LinkedHashMap<>();
 
-        for (Result result : allResults) {
-            String resultClass = result.getClass_();
+        for (final Result result : allResults) {
+            final String resultClass = result.getClass_();
 
             if ("chapter".equals(resultClass)) {
                 chapterLecturesMap.put(result, new ArrayList<>());
@@ -163,7 +163,7 @@ public class UdemyApiWrapper {
             }
 
             if ("lecture".equals(resultClass)) {
-                Result chapter = findChapter(allResults, result);
+                final Result chapter = findChapter(allResults, result);
                 if (chapter != null && chapterLecturesMap.containsKey(chapter)) {
                     chapterLecturesMap.get(chapter).add(result);
                 }
@@ -180,13 +180,13 @@ public class UdemyApiWrapper {
      * @param lecture    Udemy API result representing a lecture
      * @return Udemy API result representing the corresponding chapter
      */
-    private static Result findChapter(List<Result> allResults, Result lecture) {
+    private static Result findChapter(final List<Result> allResults, final Result lecture) {
         Result foundChapter = null;
         int minSortOrderDifference = Integer.MAX_VALUE;
 
-        for (Result result : allResults) {
+        for (final Result result : allResults) {
             if ("chapter".equals(result.getClass_()) && result.getSortOrder() > lecture.getSortOrder()) {
-                int sortOrderDifference = result.getSortOrder() - lecture.getSortOrder();
+                final int sortOrderDifference = result.getSortOrder() - lecture.getSortOrder();
                 if (sortOrderDifference < minSortOrderDifference) {
                     minSortOrderDifference = sortOrderDifference;
                     foundChapter = result;
