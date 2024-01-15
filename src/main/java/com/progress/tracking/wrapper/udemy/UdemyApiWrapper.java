@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.progress.tracking.entity.UdemyCourse;
 import com.progress.tracking.entity.UdemyCourseCurriculum;
 import com.progress.tracking.util.WsUtil;
+import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.wrapper.udemy.pojo.Result;
 import com.progress.tracking.wrapper.udemy.pojo.UdemyResponse;
 
@@ -24,11 +25,18 @@ public class UdemyApiWrapper {
     /**
      * Initializes the Wrapper, generating the token with the provided information.
      *
-     * @param clientID     Udemy API client ID
-     * @param clientSecret Udemy API client secret
-     * @return UdemyApiWrapper instance
+     * @param clientID     Udemy API client ID.
+     * @param clientSecret Udemy API client secret.
+     * @return UdemyApiWrapper instance.
+     * @throws InvalidParameterException If either the clientID or clientSecret is null or blank.
      */
-    public static UdemyApiWrapper initialize(String clientID, String clientSecret) {
+    public static UdemyApiWrapper initialize(final String clientID, final String clientSecret) throws InvalidParameterException {
+        if (clientID == null || clientID.isBlank())
+            throw new InvalidParameterException("clientID");
+
+        if (clientSecret == null || clientSecret.isBlank())
+            throw new InvalidParameterException("clientID");
+
         UdemyApiWrapper wrapper = new UdemyApiWrapper();
         String decoded = clientID + ":" + clientSecret;
         wrapper.token = Base64.getEncoder().encodeToString(decoded.getBytes());
@@ -38,10 +46,10 @@ public class UdemyApiWrapper {
     /**
      * Creates the header with the necessary authorization information.
      *
-     * @return Map representing the HTTP headers
+     * @return Map representing the HTTP headers.
      */
     private Map<String, String> createHeader() {
-        Map<String, String> header = new HashMap<>();
+        final Map<String, String> header = new HashMap<>();
         header.put("Authorization", "Basic " + token);
         header.put("Content-Type", "application/json");
         return header;
@@ -50,18 +58,25 @@ public class UdemyApiWrapper {
     /**
      * Searches for Udemy courses based on the provided search string.
      *
-     * @param search Search string for courses
-     * @return List of UdemyCourse objects matching the search
+     * @param search Search string for courses.
+     * @return List of UdemyCourse objects matching the search.
+     * @throws InvalidParameterException If the search string is null or blank.
+     * @throws InvalidParameterException If the page size is null or less than 5.
      */
-    public List<UdemyCourse> searchCourse(String search) {
-        String jsonResponse;
+    public List<UdemyCourse> searchCourse(final String search, final Integer pageSize) throws InvalidParameterException {
+        if (search == null || search.isBlank())
+            throw new InvalidParameterException("search");
 
-        Map<String, String> query = new HashMap<>();
-        List<UdemyCourse> courses = new ArrayList<>();
+        if (pageSize == null || pageSize < 5)
+            throw new InvalidParameterException("pageSize", "The value of 'pageSize' must not be null and must be greater than or equal to 5");
 
-        // TODO create param for page_size
-        query.put("page_size", "5");
+        final List<UdemyCourse> courses = new ArrayList<>();
+        final Map<String, String> query = new HashMap<>();
+        query.put("page_size", pageSize.toString());
         query.put("search", search);
+
+        final String jsonResponse;
+
         try {
             jsonResponse = WsUtil.sendGet(BASE_URL, createHeader(), query);
         } catch (Exception e) {
@@ -70,10 +85,10 @@ public class UdemyApiWrapper {
             return courses;
         }
 
-        UdemyResponse response = gson.fromJson(jsonResponse, UdemyResponse.class);
+        final UdemyResponse response = gson.fromJson(jsonResponse, UdemyResponse.class);
 
-        for (Result result : response.getResults()) {
-            UdemyCourse course = new UdemyCourse();
+        for (final Result result : response.getResults()) {
+            final UdemyCourse course = new UdemyCourse();
             course.setId(result.getId());
             course.setTitle(result.getTitle());
             course.setHeadline(result.getHeadline());
@@ -88,20 +103,24 @@ public class UdemyApiWrapper {
     /**
      * Retrieves the curriculum of a Udemy course based on the provided course ID.
      *
-     * @param courseID Udemy course ID
-     * @return UdemyCourseCurriculum object representing the course curriculum
+     * @param courseID Udemy course ID.
+     * @return UdemyCourseCurriculum object representing the course curriculum.
+     * @throws InvalidParameterException If the course ID is null.
+     * @throws InvalidParameterException If the page size is null or less than 5.
      */
-    public UdemyCourseCurriculum getCourseCurriculum(Long courseID) {
-        // TODO: throw exception if token is null
-        // TODO: throw exception if courseID is null
+    public UdemyCourseCurriculum getCourseCurriculum(final Long courseID, final Integer pageSize) throws InvalidParameterException {
+        if (courseID == null)
+            throw new InvalidParameterException("courseID");
 
-        String url = BASE_URL + courseID.toString() + "/public-curriculum-items/";
+        if (pageSize == null || pageSize < 5)
+            throw new InvalidParameterException("pageSize", "The value of 'pageSize' must not be null and must be greater than or equal to 5");
+
+        final String url = BASE_URL + courseID + "/public-curriculum-items/";
+        final Map<String, String> query = new HashMap<>();
+        query.put("page_size", pageSize.toString());
+
         String jsonResponse;
 
-        Map<String, String> query = new HashMap<>();
-
-        // TODO create param for page_size
-        query.put("page_size", "100");
         try {
             jsonResponse = WsUtil.sendGet(url, createHeader(), query);
         } catch (Exception e) {
