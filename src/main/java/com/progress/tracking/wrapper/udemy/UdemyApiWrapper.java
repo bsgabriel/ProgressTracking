@@ -38,8 +38,8 @@ public class UdemyApiWrapper {
         if (clientSecret == null || clientSecret.isBlank())
             throw new InvalidParameterException("clientID");
 
-        UdemyApiWrapper wrapper = new UdemyApiWrapper();
-        String decoded = clientID + ":" + clientSecret;
+        final String decoded = clientID + ":" + clientSecret;
+        final UdemyApiWrapper wrapper = new UdemyApiWrapper();
         wrapper.token = Base64.getEncoder().encodeToString(decoded.getBytes());
         return wrapper;
     }
