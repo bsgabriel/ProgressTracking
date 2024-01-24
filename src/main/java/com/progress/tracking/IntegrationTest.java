@@ -60,9 +60,7 @@ public class IntegrationTest {
 
     public static void main(String[] args) {
         try {
-            List<UdemyCourse> results = null;
-
-            results = getuWrapper().searchCourse(COURSE_TO_FIND, 10);
+            List<UdemyCourse> results = getuWrapper().searchCourse(COURSE_TO_FIND, 10);
 
             if (results.isEmpty()) {
                 System.out.println("Couldn't find the specified course");
