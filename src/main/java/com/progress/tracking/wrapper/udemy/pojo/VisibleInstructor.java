@@ -1,32 +1,19 @@
-package com.progress.tracking.response.udemy;
+package com.progress.tracking.wrapper.udemy.pojo;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class VisibleInstructor {
 
-    @SerializedName("title")
-    @Expose
     private String title;
-
-    @SerializedName("name")
-    @Expose
     private String name;
 
     @SerializedName("display_name")
-    @Expose
     private String displayName;
 
     @SerializedName("job_title")
-    @Expose
     private String jobTitle;
 
-    @SerializedName("initials")
-    @Expose
     private String initials;
-
-    @SerializedName("url")
-    @Expose
     private String url;
 
     public String getTitle() {

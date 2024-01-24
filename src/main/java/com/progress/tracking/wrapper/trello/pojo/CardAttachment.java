@@ -1,9 +1,13 @@
-package com.progress.tracking.response.trello;
+package com.progress.tracking.wrapper.trello.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CreateCardAttachmentRequest {
+public class CardAttachment {
+
+    @SerializedName("id")
+    @Expose
+    private String id;
 
     @SerializedName("name")
     @Expose
@@ -15,11 +19,19 @@ public class CreateCardAttachmentRequest {
 
     @SerializedName("token")
     @Expose
-    private String token;
-    
+    private String apiToken;
+
     @SerializedName("key")
     @Expose
-    private String key;
+    private String apiKey;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -37,19 +49,19 @@ public class CreateCardAttachmentRequest {
         this.url = url;
     }
 
-    public String getToken() {
-        return token;
+    public String getApiToken() {
+        return apiToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setApiToken(String apiToken) {
+        this.apiToken = apiToken;
     }
 
-    public String getKey() {
-        return key;
+    public String getApiKey() {
+        return apiKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }

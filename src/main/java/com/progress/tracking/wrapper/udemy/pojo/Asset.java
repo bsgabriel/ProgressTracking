@@ -1,29 +1,17 @@
 
-package com.progress.tracking.response.udemy;
+package com.progress.tracking.wrapper.udemy.pojo;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Asset {
 
-    @SerializedName("_class")
-    @Expose
     private String _class;
-
-    @SerializedName("id")
-    @Expose
     private Integer id;
 
     @SerializedName("asset_type")
-    @Expose
     private String assetType;
 
-    @SerializedName("title")
-    @Expose
     private String title;
-
-    @SerializedName("created")
-    @Expose
     private String created;
 
     public String getClass_() {

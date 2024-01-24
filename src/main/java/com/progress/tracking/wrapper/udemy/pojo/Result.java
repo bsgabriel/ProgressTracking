@@ -1,6 +1,5 @@
-package com.progress.tracking.response.udemy;
+package com.progress.tracking.wrapper.udemy.pojo;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -8,36 +7,19 @@ import java.util.List;
 
 public class Result {
 
-    @SerializedName("_class")
-    @Expose
     private String _class;
-
-    @SerializedName("id")
-    @Expose
     private Integer id;
 
     @SerializedName("sort_order")
-    @Expose
     private Integer sortOrder;
 
-    @SerializedName("title")
-    @Expose
     private String title;
-
-    @SerializedName("description")
-    @Expose
     private String description;
 
     @SerializedName("visible_instructors")
-    @Expose
     private List<VisibleInstructor> visibleInstructors;
 
-    @SerializedName("url")
-    @Expose
     private String url;
-
-    @SerializedName("headline")
-    @Expose
     private String headline;
 
     public String getClass_() {
