@@ -61,7 +61,7 @@ public class UdemyApiWrapper {
      *
      * @param search   Search string for courses.
      * @param pageSize The page size for the search results.
-     * @return List of UdemyCourse objects matching the search.
+     * @return List of {@linkplain UdemyCourse} objects matching the search.
      * @throws InvalidParameterException If the search string is null or blank.
      * @throws InvalidParameterException If the page size is null or less than 5.
      * @throws ApiExecutionException     If an error occurs during the API call.
@@ -103,7 +103,7 @@ public class UdemyApiWrapper {
      *
      * @param courseID Udemy course ID.
      * @param pageSize The page size for the search results.
-     * @return UdemyCourseCurriculum object representing the course curriculum.
+     * @return {@linkplain UdemyCourseCurriculum} object representing the course curriculum.
      * @throws InvalidParameterException If the course ID is null.
      * @throws InvalidParameterException If the page size is null or less than 5.
      * @throws ApiExecutionException     If an error occurs during the API call.
