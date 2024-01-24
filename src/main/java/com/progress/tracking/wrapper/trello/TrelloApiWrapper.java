@@ -272,7 +272,7 @@ public class TrelloApiWrapper {
      * @throws InvalidParameterException If idCard or attUrl is null or blank.
      * @throws ApiExecutionException     If an error occurs during the API call.
      */
-    public CardAttachment createCarUrldAttachment(final String idCard, final String name, final String attUrl) throws InvalidParameterException, ApiExecutionException {
+    public CardAttachment createCardUrlAttachment(final String idCard, final String name, final String attUrl) throws InvalidParameterException, ApiExecutionException {
         if (idCard == null || idCard.isBlank())
             throw new InvalidParameterException("idCard");
 
