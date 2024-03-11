@@ -1,7 +1,7 @@
 package com.progress.tracking;
 
-import com.progress.tracking.entity.UdemyCourse;
-import com.progress.tracking.entity.UdemyCourseCurriculum;
+import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
+import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
 import com.progress.tracking.util.exception.ApiExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.wrapper.trello.TrelloApiWrapper;

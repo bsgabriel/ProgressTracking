@@ -1,4 +1,4 @@
-package com.progress.tracking.entity;
+package com.progress.tracking.wrapper.udemy.entity;
 
 import com.progress.tracking.wrapper.udemy.pojo.VisibleInstructor;
 

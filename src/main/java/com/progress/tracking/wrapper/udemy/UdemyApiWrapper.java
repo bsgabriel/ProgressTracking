@@ -1,8 +1,8 @@
 package com.progress.tracking.wrapper.udemy;
 
 import com.google.gson.Gson;
-import com.progress.tracking.entity.UdemyCourse;
-import com.progress.tracking.entity.UdemyCourseCurriculum;
+import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
+import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
 import com.progress.tracking.util.WsUtil;
 import com.progress.tracking.util.exception.ApiExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
