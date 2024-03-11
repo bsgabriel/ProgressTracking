@@ -92,6 +92,7 @@ public class UdemyApiWrapper {
             course.setHeadline(result.getHeadline());
             course.setUrl(result.getUrl());
             course.setInstructors(result.getVisibleInstructors());
+            course.setImage(result.getImage());
             courses.add(course);
         }
 
