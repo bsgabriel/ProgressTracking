@@ -6,6 +6,7 @@ import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
 import com.progress.tracking.util.WsUtil;
 import com.progress.tracking.util.exception.ApiExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
+import com.progress.tracking.wrapper.udemy.entity.UdemyCourseSearch;
 import com.progress.tracking.wrapper.udemy.pojo.Result;
 import com.progress.tracking.wrapper.udemy.pojo.UdemyResponse;
 
@@ -61,20 +62,44 @@ public class UdemyApiWrapper {
      *
      * @param search   Search string for courses.
      * @param pageSize The page size for the search results.
-     * @return List of {@linkplain UdemyCourse} objects matching the search.
+     * @return A {@linkplain UdemyCourseSearch} object containing information about the courses matching the search criteria.
+     * This object includes the current page number, information about the courses found, and pagination details.
+     * Each course in the search result is represented by a {@linkplain UdemyCourse} object.
      * @throws InvalidParameterException If the search string is null or blank.
      * @throws InvalidParameterException If the page size is null or less than 5.
+     * @throws InvalidParameterException If the page is null or less than 1.
      * @throws ApiExecutionException     If an error occurs during the API call.
      */
-    public List<UdemyCourse> searchCourse(final String search, final Integer pageSize) throws InvalidParameterException, ApiExecutionException {
+    public UdemyCourseSearch searchCourse(final String search, final Integer pageSize) throws InvalidParameterException, ApiExecutionException {
+        return searchCourse(search, pageSize, 1);
+    }
+
+    /**
+     * Searches for Udemy courses based on the provided search string.
+     *
+     * @param search   Search string for courses.
+     * @param pageSize The page size for the search results.
+     * @param page     The page to be searched.
+     * @return A {@linkplain UdemyCourseSearch} object containing information about the courses matching the search criteria.
+     * This object includes the current page number, information about the courses found, and pagination details.
+     * Each course in the search result is represented by a {@linkplain UdemyCourse} object.
+     * @throws InvalidParameterException If the search string is null or blank.
+     * @throws InvalidParameterException If the page size is null or less than 5.
+     * @throws InvalidParameterException If the page is null or less than 1.
+     * @throws ApiExecutionException     If an error occurs during the API call.
+     */
+    public UdemyCourseSearch searchCourse(final String search, final Integer pageSize, final Integer page) throws InvalidParameterException, ApiExecutionException {
         if (search == null || search.isBlank())
             throw new InvalidParameterException("search");
 
         if (pageSize == null || pageSize < 5)
             throw new InvalidParameterException("pageSize", "The value of 'pageSize' must not be null and must be greater than or equal to 5");
 
-        final List<UdemyCourse> courses = new ArrayList<>();
-        final Map<String, String> query = new HashMap<>();
+        if (page == null || page < 1)
+            throw new InvalidParameterException("page", "The value of 'page' must not be null and must be greater than or equal to 1");
+
+        final Map<String, String> query = new LinkedHashMap<>();
+        query.put("page", page.toString());
         query.put("page_size", pageSize.toString());
         query.put("search", search);
 
@@ -85,6 +110,15 @@ public class UdemyApiWrapper {
             throw new ApiExecutionException("An error occurred while searching for the specified course.", e);
         }
 
+        final UdemyCourseSearch ret = new UdemyCourseSearch();
+        ret.setCurrentPage(page);
+
+        if (response.getNext() != null && !response.getNext().trim().isEmpty())
+            ret.setNextPage(page + 1);
+
+        if (response.getPrevious() != null && !response.getPrevious().trim().isEmpty())
+            ret.setPreviousPage(page - 1);
+
         for (final Result result : response.getResults()) {
             final UdemyCourse course = new UdemyCourse();
             course.setId(result.getId());
@@ -93,10 +127,10 @@ public class UdemyApiWrapper {
             course.setUrl(result.getUrl());
             course.setInstructors(result.getVisibleInstructors());
             course.setImage(result.getImage());
-            courses.add(course);
+            ret.getCourses().add(course);
         }
 
-        return courses;
+        return ret;
     }
 
     /**
