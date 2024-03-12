@@ -126,7 +126,7 @@ public class UdemyApiWrapper {
      * @throws InvalidParameterException If the page size is null or less than 5.
      * @throws ApiExecutionException     If an error occurs during the API call.
      */
-    public UdemyCourseCurriculum getCourseCurriculum(final Long courseID, final Integer pageSize) throws InvalidParameterException, ApiExecutionException {
+    public UdemyCourseCurriculum getCourseCurriculum(final Integer courseID, final Integer pageSize) throws InvalidParameterException, ApiExecutionException {
         if (courseID == null)
             throw new InvalidParameterException("courseID");
 
