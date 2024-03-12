@@ -1,13 +1,9 @@
 package com.progress.tracking.rest.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Course {
 
     private String name;
     private String desc;
-    private List<String> instructors;
     private String image;
     private String url;
 
@@ -25,16 +21,6 @@ public class Course {
 
     public void setDesc(String desc) {
         this.desc = desc;
-    }
-
-    public List<String> getInstructors() {
-        if (this.instructors == null)
-            this.instructors = new ArrayList<>();
-        return instructors;
-    }
-
-    public void setInstructors(List<String> instructors) {
-        this.instructors = instructors;
     }
 
     public String getImage() {
