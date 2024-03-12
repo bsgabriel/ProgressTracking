@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class Controller {
 
@@ -55,13 +57,9 @@ public class Controller {
         for (UdemyCourse c : ret.getCourses()) {
             final Course courseInfo = new Course();
             courseInfo.setName(c.getTitle());
-            courseInfo.setDesc(c.getHeadline());
+            courseInfo.setDesc(createCourseDescription(c.getHeadline(), c.getInstructors()));
             courseInfo.setImage(c.getImage());
             courseInfo.setUrl(c.getUrl());
-
-            for (VisibleInstructor instructor : c.getInstructors())
-                courseInfo.getInstructors().add(instructor.getDisplayName());
-
             response.getCourses().add(courseInfo);
         }
 
@@ -79,4 +77,20 @@ public class Controller {
         }
     }
 
+    private static String createCourseDescription(String desc, List<VisibleInstructor> instructors) {
+        if (instructors == null || instructors.isEmpty())
+            return desc;
+
+        final StringBuilder sb = new StringBuilder();
+        sb.append(desc);
+        sb.append("\n\n");
+        sb.append(instructors.size() > 1 ? "Instructors: " : "Instructor: ");
+        for (VisibleInstructor instructor : instructors) {
+            sb.append(instructor.getDisplayName());
+            if (instructors.indexOf(instructor) != instructors.size() - 1)
+                sb.append(", ");
+        }
+
+        return sb.toString();
+    }
 }
