@@ -116,14 +116,4 @@ public class Result {
         return getDescription().equals(result.getDescription());
     }
 
-    @Override
-    public int hashCode() {
-        int result = _class.hashCode();
-        result = 31 * result + getId().hashCode();
-        result = 31 * result + getSortOrder().hashCode();
-        result = 31 * result + getTitle().hashCode();
-        result = 31 * result + getDescription().hashCode();
-        result = 31 * result + getImage().hashCode();
-        return result;
-    }
 }
