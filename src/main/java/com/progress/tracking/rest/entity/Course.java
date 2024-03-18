@@ -1,11 +1,19 @@
 package com.progress.tracking.rest.entity;
 
 public class Course {
-
+    private Integer id;
     private String name;
     private String desc;
     private String image;
     private String url;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
