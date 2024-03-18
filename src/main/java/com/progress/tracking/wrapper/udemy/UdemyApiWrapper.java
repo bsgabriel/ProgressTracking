@@ -107,7 +107,8 @@ public class UdemyApiWrapper {
             course.setId(result.getId());
             course.setTitle(result.getTitle());
             course.setHeadline(result.getHeadline());
-            course.setUrl(result.getUrl());
+            if (result.getUrl() != null && !result.getUrl().isBlank())
+                course.setUrl("https://www.udemy.com" + result.getUrl());
             course.setInstructors(result.getVisibleInstructors());
             course.setImage(result.getImage());
             ret.getCourses().add(course);
