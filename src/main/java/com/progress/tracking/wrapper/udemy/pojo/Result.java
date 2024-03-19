@@ -22,6 +22,9 @@ public class Result {
     private String url;
     private String headline;
 
+    @SerializedName("image_480x270")
+    private String image;
+
     public String getClass_() {
         return _class;
     }
@@ -85,6 +88,14 @@ public class Result {
         this.headline = headline;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -100,16 +111,9 @@ public class Result {
             return false;
         if (!getTitle().equals(result.getTitle()))
             return false;
+        if (!getImage().equals(result.getImage()))
+            return false;
         return getDescription().equals(result.getDescription());
     }
 
-    @Override
-    public int hashCode() {
-        int result = _class.hashCode();
-        result = 31 * result + getId().hashCode();
-        result = 31 * result + getSortOrder().hashCode();
-        result = 31 * result + getTitle().hashCode();
-        result = 31 * result + getDescription().hashCode();
-        return result;
-    }
 }

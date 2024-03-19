@@ -1,4 +1,4 @@
-package com.progress.tracking.entity;
+package com.progress.tracking.wrapper.udemy.entity;
 
 import com.progress.tracking.wrapper.udemy.pojo.VisibleInstructor;
 
@@ -11,6 +11,7 @@ public class UdemyCourse {
     private String headline;
     private List<VisibleInstructor> instructors;
     private String url;
+    private String image;
 
     public Integer getId() {
         return id;
@@ -54,6 +55,14 @@ public class UdemyCourse {
         this.url = url;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "UdemySearchedCourse{" +
@@ -62,6 +71,7 @@ public class UdemyCourse {
                 ", headline='" + headline + '\'' +
                 ", instructors=" + instructors +
                 ", url='" + url + '\'' +
+                ", image='" + image + '\'' +
                 '}';
     }
 }
