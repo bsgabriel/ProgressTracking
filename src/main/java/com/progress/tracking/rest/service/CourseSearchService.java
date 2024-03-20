@@ -43,7 +43,7 @@ public class CourseSearchService {
 
             for (UdemyCourse udemyCourse : ret.getCourses()) {
                 final UdemyCourseCurriculum courseCurriculum = uWrapper.getCourseCurriculum(udemyCourse.getId(), 100);
-                final Course course = this.courseMapper.udemyCourseToCourse(udemyCourse, courseCurriculum);
+                final Course course = this.courseMapper.courseFromUdemy(udemyCourse, courseCurriculum);
 
                 if (course == null)
                     continue;

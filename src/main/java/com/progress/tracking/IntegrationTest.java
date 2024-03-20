@@ -10,7 +10,6 @@ import com.progress.tracking.wrapper.trello.TrelloApiWrapper;
 import com.progress.tracking.wrapper.trello.pojo.*;
 import com.progress.tracking.wrapper.udemy.UdemyApiWrapper;
 import com.progress.tracking.wrapper.udemy.pojo.Result;
-import com.progress.tracking.wrapper.udemy.pojo.VisibleInstructor;
 
 import java.util.List;
 
@@ -77,7 +76,7 @@ public class IntegrationTest {
                 return;
             }
 
-            Course course = new CourseMapper().udemyCourseToCourse(uCourse, curriculum);
+            Course course = new CourseMapper().courseFromUdemy(uCourse, curriculum);
 
             List<Board> boards = gettWrapper().searchBoardByName(BOARD_NAME);
 
