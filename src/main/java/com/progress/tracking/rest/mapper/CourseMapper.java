@@ -25,7 +25,7 @@ public class CourseMapper {
      * @param udemyCourseCurriculum The {@linkplain UdemyCourseCurriculum} object containing the chapters and lessons for the Udemy course.
      * @return A Course object mapped from the {@linkplain UdemyCourse}.
      */
-    public Course udemyCourseToCourse(final UdemyCourse udemyCourse, final UdemyCourseCurriculum udemyCourseCurriculum) {
+    public Course courseFromUdemy(final UdemyCourse udemyCourse, final UdemyCourseCurriculum udemyCourseCurriculum) {
         if (udemyCourse == null)
             return null;
 
