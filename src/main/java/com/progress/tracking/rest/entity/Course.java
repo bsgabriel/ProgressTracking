@@ -1,11 +1,15 @@
 package com.progress.tracking.rest.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Course {
     private Integer id;
     private String name;
     private String desc;
     private String image;
     private String url;
+    private List<Chapter> chapters;
 
     public Integer getId() {
         return id;
@@ -45,5 +49,15 @@ public class Course {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public List<Chapter> getChapters() {
+        if (this.chapters == null)
+            this.chapters = new ArrayList<>();
+        return chapters;
+    }
+
+    public void setChapters(List<Chapter> chapters) {
+        this.chapters = chapters;
     }
 }

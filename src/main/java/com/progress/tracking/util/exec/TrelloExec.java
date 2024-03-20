@@ -1,15 +1,14 @@
 package com.progress.tracking.util.exec;
 
+import com.progress.tracking.rest.entity.Chapter;
 import com.progress.tracking.rest.request.AbstractRequest;
 import com.progress.tracking.util.exception.ApiExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.util.exception.WrapperInitializationException;
 import com.progress.tracking.wrapper.trello.TrelloApiWrapper;
 import com.progress.tracking.wrapper.trello.pojo.*;
-import com.progress.tracking.wrapper.udemy.pojo.Result;
 
 import java.util.List;
-import java.util.Map;
 
 public class TrelloExec {
 
@@ -133,18 +132,16 @@ public class TrelloExec {
         return tList;
     }
 
-    public void createChecklists(final Map<Result, List<Result>> chapters, final Card card) throws ApiExecutionException, InvalidParameterException {
-        int idxItem = 1;
-        for (Result chapter : chapters.keySet()) {
-            final List<Result> lectures = chapters.get(chapter);
+    public void createChecklists(final List<Chapter> chapters, final Card card) throws ApiExecutionException, InvalidParameterException {
+        for (Chapter chapter : chapters) {
+            final List<String> lectures = chapter.getLessons();
             if (lectures == null || lectures.isEmpty())
                 continue;
 
-            final Checklist checkList = this.createChecklistForCard(card.getId(), chapter.getTitle());
+            final Checklist checkList = this.createChecklistForCard(card.getId(), chapter.getName());
 
-            for (Result lecture : lectures) {
-                this.createItemForChecklist(checkList.getId(), idxItem + ". " + lecture.getTitle());
-                idxItem++;
+            for (String lecture : lectures) {
+                this.createItemForChecklist(checkList.getId(), lecture);
             }
         }
     }

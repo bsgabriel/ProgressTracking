@@ -8,6 +8,7 @@ import com.progress.tracking.util.exception.ApiExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.wrapper.udemy.UdemyApiWrapper;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
+import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourseSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,8 @@ public class CourseSearchService {
             }
 
             for (UdemyCourse udemyCourse : ret.getCourses()) {
-                final Course course = this.courseMapper.udemyCourseToCourse(udemyCourse);
+                final UdemyCourseCurriculum courseCurriculum = uWrapper.getCourseCurriculum(udemyCourse.getId(), 100);
+                final Course course = this.courseMapper.udemyCourseToCourse(udemyCourse, courseCurriculum);
 
                 if (course == null)
                     continue;

@@ -1,11 +1,16 @@
 package com.progress.tracking.rest.mapper;
 
+import com.progress.tracking.rest.entity.Chapter;
 import com.progress.tracking.rest.entity.Course;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
+import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
+import com.progress.tracking.wrapper.udemy.pojo.Result;
 import com.progress.tracking.wrapper.udemy.pojo.VisibleInstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service class responsible for mapping courses from different platforms to the {@linkplain Course} entity.
@@ -14,12 +19,13 @@ import java.util.List;
 public class CourseMapper {
 
     /**
-     * Maps {@linkplain UdemyCourse} object to a {@linkplain Course} object.
+     * Maps a {@linkplain UdemyCourse} object to a {@linkplain Course} object, including the chapters and lessons from the Udemy course curriculum.
      *
-     * @param udemyCourse The {@linkplain UdemyCourse} object to map.
+     * @param udemyCourse           The {@linkplain UdemyCourse} object to map.
+     * @param udemyCourseCurriculum The {@linkplain UdemyCourseCurriculum} object containing the chapters and lessons for the Udemy course.
      * @return A Course object mapped from the {@linkplain UdemyCourse}.
      */
-    public Course udemyCourseToCourse(final UdemyCourse udemyCourse) {
+    public Course udemyCourseToCourse(final UdemyCourse udemyCourse, final UdemyCourseCurriculum udemyCourseCurriculum) {
         if (udemyCourse == null)
             return null;
 
@@ -29,7 +35,41 @@ public class CourseMapper {
         course.setDesc(createCourseDescription(udemyCourse.getHeadline(), udemyCourse.getInstructors()));
         course.setImage(udemyCourse.getImage());
         course.setUrl(udemyCourse.getUrl());
+        course.setChapters(createChapetrsList(udemyCourseCurriculum.getChapters()));
+
         return course;
+    }
+
+    /**
+     * Converts the {@linkplain  UdemyCourseCurriculum} into a list of chapters for the {@linkplain Course}.
+     * Each chapter contains its name and a list of lessons.
+     *
+     * @param uChapters A map representing Udemy course chapters and their corresponding lectures.
+     * @return A list of {@linkplain Chapter} objects representing the chapters of the course.
+     */
+    private List<Chapter> createChapetrsList(final Map<Result, List<Result>> uChapters) {
+        final List<Chapter> chapters = new ArrayList<>();
+        if (uChapters == null || uChapters.isEmpty())
+            return chapters;
+
+        int idxItem = 1;
+        for (Result uChapter : uChapters.keySet()) {
+            final List<Result> lectures = uChapters.get(uChapter);
+            if (lectures == null || lectures.isEmpty())
+                continue;
+
+            final Chapter chapter = new Chapter();
+            chapter.setName(uChapter.getTitle());
+
+            for (Result lecture : lectures) {
+                chapter.getLessons().add(idxItem + ". " + lecture.getTitle());
+                idxItem++;
+            }
+
+            chapters.add(chapter);
+        }
+
+        return chapters;
     }
 
     /**

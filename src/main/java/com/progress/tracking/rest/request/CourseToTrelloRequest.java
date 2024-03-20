@@ -1,13 +1,12 @@
 package com.progress.tracking.rest.request;
 
+import com.progress.tracking.rest.entity.Course;
+
 public class CourseToTrelloRequest extends AbstractRequest {
     private String boardName;
     private String boardDescription;
     private String listName;
-    private Integer courseId;
-    private String courseName;
-    private String courseDescription;
-    private String courseLink;
+    private Course course;
 
     public String getBoardName() {
         return boardName;
@@ -33,36 +32,11 @@ public class CourseToTrelloRequest extends AbstractRequest {
         this.listName = listName;
     }
 
-    public Integer getCourseId() {
-        return courseId;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourseId(Integer courseId) {
-        this.courseId = courseId;
+    public void setCourse(Course course) {
+        this.course = course;
     }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public String getCourseDescription() {
-        return courseDescription;
-    }
-
-    public void setCourseDescription(String courseDescription) {
-        this.courseDescription = courseDescription;
-    }
-
-    public String getCourseLink() {
-        return courseLink;
-    }
-
-    public void setCourseLink(String courseLink) {
-        this.courseLink = courseLink;
-    }
-
 }
