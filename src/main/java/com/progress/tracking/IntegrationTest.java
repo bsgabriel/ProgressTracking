@@ -1,5 +1,7 @@
 package com.progress.tracking;
 
+import com.progress.tracking.rest.entity.Course;
+import com.progress.tracking.rest.mapper.CourseMapper;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
 import com.progress.tracking.util.exception.ApiExecutionException;
@@ -67,13 +69,15 @@ public class IntegrationTest {
                 return;
             }
 
-            UdemyCourse course = results.get(0);
-            UdemyCourseCurriculum curriculum = getuWrapper().getCourseCurriculum(course.getId().longValue(), 100);
+            UdemyCourse uCourse = results.get(0);
+            UdemyCourseCurriculum curriculum = getuWrapper().getCourseCurriculum(uCourse.getId(), 100);
 
             if (curriculum == null || curriculum.getChapters().isEmpty()) {
                 System.out.println("Couldn't find the course curriculum");
                 return;
             }
+
+            Course course = new CourseMapper().udemyCourseToCourse(uCourse, curriculum);
 
             List<Board> boards = gettWrapper().searchBoardByName(BOARD_NAME);
 
@@ -84,7 +88,7 @@ public class IntegrationTest {
                 board = boards.get(0);
 
             TrelloList list = searchListFromBoard(board.getId(), LIST_NAME);
-            Card card = createTrelloCard(list.getId(), course.getTitle(), course.getHeadline(), course.getInstructors());
+            Card card = createTrelloCard(list.getId(), course.getName(), course.getDesc());
             attachCourseLink(card.getId(), "Link", course.getUrl());
 
             int idxItem = 1;
@@ -134,8 +138,8 @@ public class IntegrationTest {
         return list;
     }
 
-    private static Card createTrelloCard(String idList, String name, String desc, List<VisibleInstructor> instructors) throws ApiExecutionException, InvalidParameterException {
-        Card card = gettWrapper().createCard(idList, name, createDescription(desc, instructors));
+    private static Card createTrelloCard(String idList, String name, String desc) throws ApiExecutionException, InvalidParameterException {
+        Card card = gettWrapper().createCard(idList, name, desc);
 
         StringBuilder sb = new StringBuilder();
         sb.append("Created card:").append("\n");
@@ -149,23 +153,6 @@ public class IntegrationTest {
         System.out.println(sb);
 
         return card;
-    }
-
-    private static String createDescription(String desc, List<VisibleInstructor> instructors) {
-        if (instructors == null || instructors.isEmpty())
-            return desc;
-
-        final StringBuilder sb = new StringBuilder();
-        sb.append(desc);
-        sb.append("\n\n");
-        sb.append(instructors.size() > 1 ? "Instructors: " : "Instructor: ");
-        for (VisibleInstructor instructor : instructors) {
-            sb.append(instructor.getDisplayName());
-            if (instructors.indexOf(instructor) != instructors.size() - 1)
-                sb.append(", ");
-        }
-
-        return sb.toString();
     }
 
     private static void attachCourseLink(String idCard, String attName, String attUrl) throws ApiExecutionException, InvalidParameterException {
