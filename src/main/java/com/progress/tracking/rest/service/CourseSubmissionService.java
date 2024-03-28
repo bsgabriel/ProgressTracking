@@ -4,7 +4,6 @@ import com.progress.tracking.rest.request.CourseToTrelloRequest;
 import com.progress.tracking.rest.response.CourseToTrelloResponse;
 import com.progress.tracking.util.exception.ApiExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
-import com.progress.tracking.util.exec.TrelloExec;
 import com.progress.tracking.wrapper.trello.TrelloApiWrapper;
 import com.progress.tracking.wrapper.trello.pojo.Board;
 import com.progress.tracking.wrapper.trello.pojo.Card;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class CourseSubmissionService {
 
     @Autowired
-    private TrelloExec trelloExec;
+    private TrelloService trelloExec;
 
     public ResponseEntity<CourseToTrelloResponse> submitToTrello(@RequestBody CourseToTrelloRequest req) {
         final CourseToTrelloResponse response = new CourseToTrelloResponse();

@@ -1,4 +1,4 @@
-package com.progress.tracking.util.exec;
+package com.progress.tracking.rest.service;
 
 import com.progress.tracking.rest.entity.Chapter;
 import com.progress.tracking.util.exception.ApiExecutionException;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 @Service
-public class TrelloExec {
+public class TrelloService {
 
     private static final int MAX_THREADS = 5;
 
