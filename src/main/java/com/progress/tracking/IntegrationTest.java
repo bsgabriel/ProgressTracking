@@ -179,7 +179,7 @@ public class IntegrationTest {
     }
 
     private static void createItemForChecklist(String idChecklist, String name) throws ApiExecutionException, InvalidParameterException {
-        ChecklistItem item = gettWrapper().createChecklistItem(idChecklist, name);
+        ChecklistItem item = gettWrapper().createChecklistItem(idChecklist, name, null);
         StringBuilder sb = new StringBuilder();
         sb.append("Checklist item:").append("\n");
         sb.append("\t").append("id: ").append(item.getId()).append("\n");
