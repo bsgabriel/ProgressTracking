@@ -1,40 +1,38 @@
 package com.progress.tracking.util.exec;
 
 import com.progress.tracking.rest.entity.Chapter;
-import com.progress.tracking.rest.request.AbstractRequest;
 import com.progress.tracking.util.exception.ApiExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
-import com.progress.tracking.util.exception.WrapperInitializationException;
 import com.progress.tracking.wrapper.trello.TrelloApiWrapper;
 import com.progress.tracking.wrapper.trello.pojo.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
+@Service
 public class TrelloExec {
 
-    final private TrelloApiWrapper tWrapper;
+    private static final int MAX_THREADS = 5;
 
-    public TrelloExec(final AbstractRequest req) throws WrapperInitializationException {
-        try {
-            this.tWrapper = TrelloApiWrapper.initialize(req.getTrelloApiKey(), req.getTrelloApiToken());
-        } catch (InvalidParameterException e) {
-            throw new WrapperInitializationException("Couldn't initialize Trello's API wrapper", e);
-        }
-    }
+    @Autowired
+    private ThreadPoolTaskExecutor taskExecutor;
 
-    public Board searchBoardByName(final String boardName, final String description) throws ApiExecutionException, InvalidParameterException {
-        final List<Board> boards = this.tWrapper.searchBoardByName(boardName);
+    public Board searchBoardByName(final TrelloApiWrapper tWrapper, final String boardName, final String description) throws ApiExecutionException, InvalidParameterException {
+        final List<Board> boards = tWrapper.searchBoardByName(boardName);
         final Board board;
         if (boards.isEmpty())
-            board = this.createTrelloBoard(boardName, description);
+            board = this.createTrelloBoard(tWrapper, boardName, description);
         else
             board = boards.get(0);
 
         return board;
     }
 
-    public Board createTrelloBoard(String boardName, String desc) throws ApiExecutionException, InvalidParameterException {
-        final Board board = this.tWrapper.createBoard(boardName, desc);
+    private Board createTrelloBoard(final TrelloApiWrapper tWrapper, final String boardName, final String desc) throws ApiExecutionException, InvalidParameterException {
+        final Board board = tWrapper.createBoard(boardName, desc);
 
         StringBuilder sb = new StringBuilder();
         sb.append("\t").append("name: ").append(board.getName()).append("\n");
@@ -48,8 +46,8 @@ public class TrelloExec {
         return board;
     }
 
-    public TrelloList createTrelloList(final String idBoard, final String name) throws ApiExecutionException, InvalidParameterException {
-        TrelloList list = this.tWrapper.createList(idBoard, name);
+    private TrelloList createTrelloList(final TrelloApiWrapper tWrapper, final String idBoard, final String name) throws ApiExecutionException, InvalidParameterException {
+        TrelloList list = tWrapper.createList(idBoard, name);
 
         StringBuilder sb = new StringBuilder();
         sb.append("Created list:").append("\n");
@@ -61,8 +59,8 @@ public class TrelloExec {
         return list;
     }
 
-    public Card createTrelloCard(String idList, String name, String desc) throws ApiExecutionException, InvalidParameterException {
-        Card card = this.tWrapper.createCard(idList, name, desc);
+    public Card createTrelloCard(final TrelloApiWrapper tWrapper, final String idList, final String name, final String desc) throws ApiExecutionException, InvalidParameterException {
+        Card card = tWrapper.createCard(idList, name, desc);
 
         StringBuilder sb = new StringBuilder();
         sb.append("Created card:").append("\n");
@@ -78,8 +76,8 @@ public class TrelloExec {
         return card;
     }
 
-    public void attachCourseLink(String idCard, String attName, String attUrl) throws ApiExecutionException, InvalidParameterException {
-        CardAttachment att = this.tWrapper.createCardUrlAttachment(idCard, attName, attUrl);
+    public void attachCourseLink(final TrelloApiWrapper tWrapper, final String idCard, final String attName, final String attUrl) throws ApiExecutionException, InvalidParameterException {
+        CardAttachment att = tWrapper.createCardUrlAttachment(idCard, attName, attUrl);
         StringBuilder sb = new StringBuilder();
         sb.append("Anexo criado:").append("\n");
         sb.append("\t").append("id: ").append(att.getId()).append("\n");
@@ -88,8 +86,8 @@ public class TrelloExec {
         System.out.println(sb);
     }
 
-    private Checklist createChecklistForCard(String idCard, String name) throws ApiExecutionException, InvalidParameterException {
-        Checklist lst = this.tWrapper.createChecklist(idCard, name);
+    private Checklist createChecklistForCard(final TrelloApiWrapper tWrapper, final String idCard, final String name) throws ApiExecutionException, InvalidParameterException {
+        Checklist lst = tWrapper.createChecklist(idCard, name);
         StringBuilder sb = new StringBuilder();
         sb.append("Checklist:").append("\n");
         sb.append("\t").append("id: ").append(lst.getId()).append("\n");
@@ -102,21 +100,22 @@ public class TrelloExec {
         return lst;
     }
 
-    private void createItemForChecklist(String idChecklist, String name) throws ApiExecutionException, InvalidParameterException {
-        ChecklistItem item = this.tWrapper.createChecklistItem(idChecklist, name);
+    private void createItemForChecklist(final TrelloApiWrapper tWrapper, final String idChecklist, final String name, final Integer idx) throws ApiExecutionException, InvalidParameterException {
+        ChecklistItem item = tWrapper.createChecklistItem(idChecklist, name, idx);
         StringBuilder sb = new StringBuilder();
         sb.append("Checklist item:").append("\n");
         sb.append("\t").append("id: ").append(item.getId()).append("\n");
         sb.append("\t").append("name: ").append(item.getName()).append("\n");
         sb.append("\t").append("checklist's ID: ").append(item.getIdChecklist()).append("\n");
+        sb.append("\t").append("index: ").append(idx).append("\n");
         System.out.println(sb);
     }
 
-    public TrelloList searchListFromBoard(final String idBoard, final String list) throws ApiExecutionException, InvalidParameterException {
-        List<TrelloList> lists = this.tWrapper.getListsFromBoard(idBoard);
+    public TrelloList searchListFromBoard(final TrelloApiWrapper tWrapper, final String idBoard, final String list) throws ApiExecutionException, InvalidParameterException {
+        List<TrelloList> lists = tWrapper.getListsFromBoard(idBoard);
 
         if (lists == null || lists.isEmpty())
-            return createTrelloList(idBoard, list);
+            return createTrelloList(tWrapper, idBoard, list);
 
         TrelloList tList = null;
         for (TrelloList l : lists) {
@@ -127,22 +126,45 @@ public class TrelloExec {
         }
 
         if (tList == null)
-            return createTrelloList(idBoard, list);
+            return createTrelloList(tWrapper, idBoard, list);
 
         return tList;
     }
 
-    public void createChecklists(final List<Chapter> chapters, final Card card) throws ApiExecutionException, InvalidParameterException {
+    public void createChecklists(final TrelloApiWrapper tWrapper, final List<Chapter> chapters, final Card card) throws ApiExecutionException, InvalidParameterException {
         for (Chapter chapter : chapters) {
-            final List<String> lectures = chapter.getLessons();
-            if (lectures == null || lectures.isEmpty())
+            final List<String> lessons = chapter.getLessons();
+            if (lessons == null || lessons.isEmpty())
                 continue;
 
-            final Checklist checkList = this.createChecklistForCard(card.getId(), chapter.getName());
+            final Checklist checkList = this.createChecklistForCard(tWrapper, card.getId(), chapter.getName());
+            final int lessonsPerThread = (int) Math.ceil((double) lessons.size() / MAX_THREADS);
+            final CountDownLatch latch = new CountDownLatch(MAX_THREADS);
 
-            for (String lecture : lectures) {
-                this.createItemForChecklist(checkList.getId(), lecture);
+            for (int threadId = 0; threadId < MAX_THREADS; threadId++) {
+                final int start = threadId * lessonsPerThread;
+                final int end = Math.min((threadId + 1) * lessonsPerThread, lessons.size());
+                this.taskExecutor.submit(() -> submit(start, end, tWrapper, latch, checkList.getId(), lessons));
             }
+
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void submit(final int start, final int end, final TrelloApiWrapper tWrapper, final CountDownLatch latch, final String checkListId, final List<String> lessons) {
+        try {
+            for (int lectureIndex = start; lectureIndex < end; lectureIndex++) {
+                String lecture = lessons.get(lectureIndex);
+                this.createItemForChecklist(tWrapper, checkListId, lecture, lectureIndex + 1);
+            }
+        } catch (InvalidParameterException | ApiExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            latch.countDown();
         }
     }
 }

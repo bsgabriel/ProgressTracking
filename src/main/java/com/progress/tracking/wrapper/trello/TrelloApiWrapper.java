@@ -242,7 +242,7 @@ public class TrelloApiWrapper {
      * @throws InvalidParameterException If the either the idChecklist or name is null or blank.
      * @throws ApiExecutionException     If an error occurs during the API call.
      */
-    public ChecklistItem createChecklistItem(final String idChecklist, final String name) throws InvalidParameterException, ApiExecutionException {
+    public ChecklistItem createChecklistItem(final String idChecklist, final String name, final Integer idx) throws InvalidParameterException, ApiExecutionException {
         if (idChecklist == null || idChecklist.isBlank())
             throw new InvalidParameterException("idChecklist");
 
@@ -254,6 +254,7 @@ public class TrelloApiWrapper {
         req.setName(name);
         req.setApiKey(apiKey);
         req.setApiToken(apiToken);
+        req.setPosition(idx);
 
         try {
             return doRequest(url, req, ChecklistItem.class);
