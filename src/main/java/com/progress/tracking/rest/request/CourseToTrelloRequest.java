@@ -2,11 +2,29 @@ package com.progress.tracking.rest.request;
 
 import com.progress.tracking.rest.entity.Course;
 
-public class CourseToTrelloRequest extends AbstractRequest {
+public class CourseToTrelloRequest {
+    private String trelloApiKey;
+    private String trelloApiToken;
     private String boardName;
     private String boardDescription;
     private String listName;
     private Course course;
+
+    public String getTrelloApiKey() {
+        return trelloApiKey;
+    }
+
+    public void setTrelloApiKey(String trelloApiKey) {
+        this.trelloApiKey = trelloApiKey;
+    }
+
+    public String getTrelloApiToken() {
+        return trelloApiToken;
+    }
+
+    public void setTrelloApiToken(String trelloApiToken) {
+        this.trelloApiToken = trelloApiToken;
+    }
 
     public String getBoardName() {
         return boardName;
