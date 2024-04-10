@@ -3,7 +3,7 @@ package com.progress.tracking.wrapper.trello;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.progress.tracking.util.WsUtil;
-import com.progress.tracking.util.exception.ApiExecutionException;
+import com.progress.tracking.util.exception.WrapperExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.wrapper.trello.pojo.*;
 
@@ -63,9 +63,9 @@ public class TrelloApiWrapper {
      * @param boardName Name of the Trello board to search for.
      * @return List of {@linkplain Board} objects matching the search criteria.
      * @throws InvalidParameterException If the boardName is null or blank.
-     * @throws ApiExecutionException     If an error occurs during the API call.
+     * @throws WrapperExecutionException     If an error occurs during the API call.
      */
-    public List<Board> searchBoardByName(final String boardName) throws InvalidParameterException, ApiExecutionException {
+    public List<Board> searchBoardByName(final String boardName) throws InvalidParameterException, WrapperExecutionException {
         if (boardName == null || boardName.isBlank())
             throw new InvalidParameterException("boardName");
 
@@ -79,7 +79,7 @@ public class TrelloApiWrapper {
         try {
             return doRequest(url, params, TrelloSearchResponse.class).getBoards();
         } catch (Exception e) {
-            throw new ApiExecutionException("An error occurred while searching for the board '" + boardName + "'.", e);
+            throw new WrapperExecutionException("An error occurred while searching for the board '" + boardName + "'.", e);
         }
     }
 
@@ -89,9 +89,9 @@ public class TrelloApiWrapper {
      * @param boardId Trello board ID.
      * @return List of {@linkplain TrelloList} objects associated with the board.
      * @throws InvalidParameterException If the boardId is null or blank.
-     * @throws ApiExecutionException     If an error occurs during the API call.
+     * @throws WrapperExecutionException     If an error occurs during the API call.
      */
-    public List<TrelloList> getListsFromBoard(final String boardId) throws InvalidParameterException, ApiExecutionException {
+    public List<TrelloList> getListsFromBoard(final String boardId) throws InvalidParameterException, WrapperExecutionException {
         if (boardId == null || boardId.isBlank())
             throw new InvalidParameterException("boardId");
 
@@ -105,7 +105,7 @@ public class TrelloApiWrapper {
         try {
             jsonResponse = WsUtil.sendGet(url, createHeader(), params);
         } catch (Exception e) {
-            throw new ApiExecutionException("An error occurred while retrieving lists from the board: " + boardId, e);
+            throw new WrapperExecutionException("An error occurred while retrieving lists from the board: " + boardId, e);
         }
 
         return gson.fromJson(jsonResponse, new TypeToken<ArrayList<TrelloList>>() {
@@ -119,9 +119,9 @@ public class TrelloApiWrapper {
      * @param desc      Description of the Trello board.
      * @return {@linkplain Board} object representing the created board.
      * @throws InvalidParameterException If the boardName is null or blank.
-     * @throws ApiExecutionException     If an error occurs during the API call.
+     * @throws WrapperExecutionException     If an error occurs during the API call.
      */
-    public Board createBoard(final String boardName, final String desc) throws InvalidParameterException, ApiExecutionException {
+    public Board createBoard(final String boardName, final String desc) throws InvalidParameterException, WrapperExecutionException {
         if (boardName == null || boardName.isBlank())
             throw new InvalidParameterException("boardName");
 
@@ -137,7 +137,7 @@ public class TrelloApiWrapper {
         try {
             return doRequest(url, req, Board.class);
         } catch (Exception e) {
-            throw new ApiExecutionException("An error occurred while creating a board. {name='" + boardName + "', description='" + desc + "'}.", e);
+            throw new WrapperExecutionException("An error occurred while creating a board. {name='" + boardName + "', description='" + desc + "'}.", e);
         }
     }
 
@@ -148,9 +148,9 @@ public class TrelloApiWrapper {
      * @param name    Name of the Trello list.
      * @return {@linkplain TrelloList} object representing the created list.
      * @throws InvalidParameterException If the either the idBoard or name is null or blank.
-     * @throws ApiExecutionException     If an error occurs during the API call.
+     * @throws WrapperExecutionException     If an error occurs during the API call.
      */
-    public TrelloList createList(final String idBoard, final String name) throws InvalidParameterException, ApiExecutionException {
+    public TrelloList createList(final String idBoard, final String name) throws InvalidParameterException, WrapperExecutionException {
         if (idBoard == null || idBoard.isBlank())
             throw new InvalidParameterException("idBoard");
 
@@ -167,7 +167,7 @@ public class TrelloApiWrapper {
         try {
             return doRequest(url, req, TrelloList.class);
         } catch (Exception e) {
-            throw new ApiExecutionException("An error occurred while creating a list into the board: " + idBoard, e);
+            throw new WrapperExecutionException("An error occurred while creating a list into the board: " + idBoard, e);
         }
     }
 
@@ -179,9 +179,9 @@ public class TrelloApiWrapper {
      * @param desc   Description of the Trello card.
      * @return {@linkplain Card} object representing the created card.
      * @throws InvalidParameterException If the either the idList or name is null or blank.
-     * @throws ApiExecutionException     If an error occurs during the API call.
+     * @throws WrapperExecutionException     If an error occurs during the API call.
      */
-    public Card createCard(final String idList, final String name, final String desc) throws InvalidParameterException, ApiExecutionException {
+    public Card createCard(final String idList, final String name, final String desc) throws InvalidParameterException, WrapperExecutionException {
         if (idList == null || idList.isBlank())
             throw new InvalidParameterException("idList");
 
@@ -199,7 +199,7 @@ public class TrelloApiWrapper {
         try {
             return doRequest(url, req, Card.class);
         } catch (Exception e) {
-            throw new ApiExecutionException("An error occured while creating a card.", e);
+            throw new WrapperExecutionException("An error occured while creating a card.", e);
         }
     }
 
@@ -210,9 +210,9 @@ public class TrelloApiWrapper {
      * @param name   Name of the Trello checklist.
      * @return {@linkplain Checklist} object representing the created checklist.
      * @throws InvalidParameterException If the either the idCard or name is null or blank.
-     * @throws ApiExecutionException     If an error occurs during the API call.
+     * @throws WrapperExecutionException     If an error occurs during the API call.
      */
-    public Checklist createChecklist(final String idCard, final String name) throws InvalidParameterException, ApiExecutionException {
+    public Checklist createChecklist(final String idCard, final String name) throws InvalidParameterException, WrapperExecutionException {
         if (idCard == null || idCard.isBlank())
             throw new InvalidParameterException("idCard");
 
@@ -229,7 +229,7 @@ public class TrelloApiWrapper {
         try {
             return doRequest(url, req, Checklist.class);
         } catch (Exception e) {
-            throw new ApiExecutionException("An error ocurred while creating a checklist for the card: " + idCard, e);
+            throw new WrapperExecutionException("An error ocurred while creating a checklist for the card: " + idCard, e);
         }
     }
 
@@ -240,9 +240,9 @@ public class TrelloApiWrapper {
      * @param name        Name of the checklist item.
      * @return {@linkplain ChecklistItem} object representing the created checklist item.
      * @throws InvalidParameterException If the either the idChecklist or name is null or blank.
-     * @throws ApiExecutionException     If an error occurs during the API call.
+     * @throws WrapperExecutionException     If an error occurs during the API call.
      */
-    public ChecklistItem createChecklistItem(final String idChecklist, final String name, final Integer idx) throws InvalidParameterException, ApiExecutionException {
+    public ChecklistItem createChecklistItem(final String idChecklist, final String name, final Integer idx) throws InvalidParameterException, WrapperExecutionException {
         if (idChecklist == null || idChecklist.isBlank())
             throw new InvalidParameterException("idChecklist");
 
@@ -259,7 +259,7 @@ public class TrelloApiWrapper {
         try {
             return doRequest(url, req, ChecklistItem.class);
         } catch (Exception e) {
-            throw new ApiExecutionException("An error ocurred while creating a checklist item for the checklist: " + idChecklist, e);
+            throw new WrapperExecutionException("An error ocurred while creating a checklist item for the checklist: " + idChecklist, e);
         }
     }
 
@@ -271,9 +271,9 @@ public class TrelloApiWrapper {
      * @param attUrl URL of the link to be attached.
      * @return {@linkplain CardAttachment} object representing the created card attachment.
      * @throws InvalidParameterException If idCard or attUrl is null or blank.
-     * @throws ApiExecutionException     If an error occurs during the API call.
+     * @throws WrapperExecutionException     If an error occurs during the API call.
      */
-    public CardAttachment createCardUrlAttachment(final String idCard, final String name, final String attUrl) throws InvalidParameterException, ApiExecutionException {
+    public CardAttachment createCardUrlAttachment(final String idCard, final String name, final String attUrl) throws InvalidParameterException, WrapperExecutionException {
         if (idCard == null || idCard.isBlank())
             throw new InvalidParameterException("idCard");
 
@@ -290,7 +290,7 @@ public class TrelloApiWrapper {
         try {
             return doRequest(url, req, CardAttachment.class);
         } catch (Exception e) {
-            throw new ApiExecutionException("An error ocurred while creating an attachment for the card: " + idCard, e);
+            throw new WrapperExecutionException("An error ocurred while creating an attachment for the card: " + idCard, e);
         }
     }
 

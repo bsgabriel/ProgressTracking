@@ -2,7 +2,7 @@ package com.progress.tracking.rest.service;
 
 import com.progress.tracking.rest.request.CourseToTrelloRequest;
 import com.progress.tracking.rest.response.CourseToTrelloResponse;
-import com.progress.tracking.util.exception.ApiExecutionException;
+import com.progress.tracking.util.exception.WrapperExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.wrapper.trello.TrelloApiWrapper;
 import com.progress.tracking.wrapper.trello.pojo.Board;
@@ -29,7 +29,7 @@ public class CourseSubmissionService {
             final Card card = this.trelloExec.createTrelloCard(tWrapper, list.getId(), req.getCourse().getName(), req.getCourse().getDesc());
             this.trelloExec.attachCourseLink(tWrapper, card.getId(), "Link", req.getCourse().getUrl());
             this.trelloExec.createChecklists(tWrapper, req.getCourse().getChapters(), card);
-        } catch (InvalidParameterException | ApiExecutionException e) {
+        } catch (InvalidParameterException | WrapperExecutionException e) {
             response.setError(e.getMessage());
 
             if (e instanceof InvalidParameterException)

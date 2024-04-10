@@ -4,7 +4,7 @@ import com.progress.tracking.rest.entity.Course;
 import com.progress.tracking.rest.mapper.CourseMapper;
 import com.progress.tracking.rest.request.SearchCourseRequest;
 import com.progress.tracking.rest.response.SearchCourseResponse;
-import com.progress.tracking.util.exception.ApiExecutionException;
+import com.progress.tracking.util.exception.WrapperExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.wrapper.udemy.UdemyApiWrapper;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
@@ -50,7 +50,7 @@ public class CourseSearchService {
 
                 response.getCourses().add(course);
             }
-        } catch (InvalidParameterException | ApiExecutionException e) {
+        } catch (InvalidParameterException | WrapperExecutionException e) {
             response.setError(e.getMessage());
             if (e instanceof InvalidParameterException)
                 return ResponseEntity.badRequest().body(response);
