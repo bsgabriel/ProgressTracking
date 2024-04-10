@@ -4,6 +4,7 @@ import com.progress.tracking.rest.entity.Course;
 import com.progress.tracking.rest.mapper.CourseMapper;
 import com.progress.tracking.rest.request.SearchCourseRequest;
 import com.progress.tracking.rest.response.SearchCourseResponse;
+import com.progress.tracking.util.exception.CourseNotFoundException;
 import com.progress.tracking.util.exception.WrapperExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.wrapper.udemy.UdemyApiWrapper;
@@ -34,10 +35,8 @@ public class CourseSearchService {
             final UdemyApiWrapper uWrapper = UdemyApiWrapper.initialize(req.getUdemyClientId(), req.getUdemyClientSecret());
             final UdemyCourseSearch ret = uWrapper.searchCourse(req.getCourse(), req.getMax(), req.getPage());
 
-            if (ret.getCourses().isEmpty()) {
-                response.setMessage("Couldn't find the specified course.");
-                return response;
-            }
+            if (ret.getCourses().isEmpty())
+                throw new CourseNotFoundException(req.getCourse(), "Udemy");
 
             for (UdemyCourse udemyCourse : ret.getCourses()) {
                 final UdemyCourseCurriculum courseCurriculum = uWrapper.getCourseCurriculum(udemyCourse.getId(), 100);
@@ -53,6 +52,6 @@ public class CourseSearchService {
             return response;
         }
 
-        return response
+        return response;
     }
 }
