@@ -28,6 +28,6 @@ public class CourseSubmissionController {
      */
     @PostMapping("/toTrello")
     public ResponseEntity<CourseToTrelloResponse> toTrello(@RequestBody CourseToTrelloRequest req) {
-        return this.courseSubmission.submitToTrello(req);
+        return ResponseEntity.ok(this.courseSubmission.submitToTrello(req));
     }
 }

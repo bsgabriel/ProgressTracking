@@ -28,7 +28,7 @@ public class CourseSearchController {
      */
     @PostMapping("/fromUdemy")
     public ResponseEntity<SearchCourseResponse> fromUdemy(@RequestBody SearchCourseRequest req) {
-        return this.courseSearch.searchFromUdemy(req);
+        return ResponseEntity.ok(this.courseSearch.searchFromUdemy(req));
     }
 
 }

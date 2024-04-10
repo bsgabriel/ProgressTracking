@@ -19,7 +19,7 @@ public class CourseSubmissionService {
     @Autowired
     private TrelloService trelloExec;
 
-    public ResponseEntity<CourseToTrelloResponse> submitToTrello(@RequestBody CourseToTrelloRequest req) {
+    public CourseToTrelloResponse submitToTrello(@RequestBody CourseToTrelloRequest req) {
         final CourseToTrelloResponse response = new CourseToTrelloResponse();
 
         try {
@@ -31,14 +31,9 @@ public class CourseSubmissionService {
             this.trelloExec.createChecklists(tWrapper, req.getCourse().getChapters(), card);
         } catch (InvalidParameterException | WrapperExecutionException e) {
             response.setError(e.getMessage());
-
-            if (e instanceof InvalidParameterException)
-                return ResponseEntity.badRequest().body(response);
-            else
-                return ResponseEntity.internalServerError().body(response);
         }
 
-        return ResponseEntity.ok().body(response);
+        return response;
     }
 
 }
