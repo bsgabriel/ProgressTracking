@@ -29,6 +29,7 @@ public class CourseSubmissionService {
             final Card card = this.trelloExec.createTrelloCard(tWrapper, list.getId(), req.getCourse().getName(), req.getCourse().getDesc());
             this.trelloExec.attachCourseLink(tWrapper, card.getId(), "Link", req.getCourse().getUrl());
             this.trelloExec.createChecklists(tWrapper, req.getCourse().getChapters(), card);
+            response.setBoardUrl(board.getShortUrl());
         } catch (InvalidParameterException | WrapperExecutionException e) {
             response.setError(e.getMessage());
         }
