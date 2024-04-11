@@ -10,11 +10,9 @@ public class CourseNotFoundException extends RuntimeException {
         this.source = source;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public String getDetail() {
+        return "Course name: " + this.courseName + "\n" +
+                "Source: " + this.source + "\n";
     }
 
-    public String getSource() {
-        return source;
-    }
 }
