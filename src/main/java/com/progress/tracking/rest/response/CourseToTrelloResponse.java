@@ -1,6 +1,6 @@
 package com.progress.tracking.rest.response;
 
-public class CourseToTrelloResponse extends AbstractResponse {
+public class CourseToTrelloResponse {
     private String boardUrl;
 
     public String getBoardUrl() {
