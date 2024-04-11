@@ -1,6 +1,6 @@
 package com.progress.tracking.util.exception;
 
-public class WrapperExecutionException extends Exception {
+public class WrapperExecutionException extends RuntimeException {
 
     public WrapperExecutionException(String message) {
         super(message);

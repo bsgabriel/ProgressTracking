@@ -1,6 +1,6 @@
 package com.progress.tracking.util.exception;
 
-public class InvalidParameterException extends Exception {
+public class InvalidParameterException extends RuntimeException {
     private static final String FIELD_NAME_TAG = "<FIELD_NAME>";
     private static final String MESSAGE = "The field '" + FIELD_NAME_TAG + "' is missing or invalid.";
 
