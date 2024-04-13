@@ -5,8 +5,6 @@ import com.progress.tracking.rest.mapper.CourseMapper;
 import com.progress.tracking.rest.request.SearchCourseRequest;
 import com.progress.tracking.rest.response.SearchCourseResponse;
 import com.progress.tracking.util.exception.CourseNotFoundException;
-import com.progress.tracking.util.exception.WrapperExecutionException;
-import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.wrapper.udemy.UdemyApiWrapper;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
@@ -27,29 +25,24 @@ public class CourseSearchService {
      * Searches for courses on Udemy platform.
      *
      * @param req The request containing search parameters.
-     * @return ResponseEntity containing search results.
+     * @return {@linkplain SearchCourseResponse} containing search results.
      */
     public SearchCourseResponse searchFromUdemy(final SearchCourseRequest req) {
         final SearchCourseResponse response = new SearchCourseResponse();
-        try {
-            final UdemyApiWrapper uWrapper = UdemyApiWrapper.initialize(req.getUdemyClientId(), req.getUdemyClientSecret());
-            final UdemyCourseSearch ret = uWrapper.searchCourse(req.getCourse(), req.getMax(), req.getPage());
+        final UdemyApiWrapper uWrapper = UdemyApiWrapper.initialize(req.getUdemyClientId(), req.getUdemyClientSecret());
+        final UdemyCourseSearch ret = uWrapper.searchCourse(req.getCourse(), req.getMax(), req.getPage());
 
-            if (ret.getCourses().isEmpty())
-                throw new CourseNotFoundException(req.getCourse(), "Udemy");
+        if (ret.getCourses().isEmpty())
+            throw new CourseNotFoundException(req.getCourse(), "Udemy");
 
-            for (UdemyCourse udemyCourse : ret.getCourses()) {
-                final UdemyCourseCurriculum courseCurriculum = uWrapper.getCourseCurriculum(udemyCourse.getId(), 100);
-                final Course course = this.courseMapper.courseFromUdemy(udemyCourse, courseCurriculum);
+        for (UdemyCourse udemyCourse : ret.getCourses()) {
+            final UdemyCourseCurriculum courseCurriculum = uWrapper.getCourseCurriculum(udemyCourse.getId(), 100);
+            final Course course = this.courseMapper.courseFromUdemy(udemyCourse, courseCurriculum);
 
-                if (course == null)
-                    continue;
+            if (course == null)
+                continue;
 
-                response.getCourses().add(course);
-            }
-        } catch (InvalidParameterException | WrapperExecutionException e) {
-            response.setError(e.getMessage());
-            return response;
+            response.getCourses().add(course);
         }
 
         return response;
