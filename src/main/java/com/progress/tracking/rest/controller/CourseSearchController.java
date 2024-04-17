@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Endpoints for course search.
  */
-@RestController()
+@RestController
 @RequestMapping("/search")
 public class CourseSearchController {
 
