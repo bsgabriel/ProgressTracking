@@ -5,7 +5,7 @@ import com.progress.tracking.rest.entity.Course;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchCourseResponse extends AbstractResponse {
+public class SearchCourseResponse {
     private Integer currentPage;
     private Integer nextPage;
     private Integer previsouPage;

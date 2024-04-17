@@ -22,6 +22,9 @@ public class TrelloRequest {
     @SerializedName("desc")
     private String description;
 
+    @SerializedName("pos")
+    private Integer position;
+
     public String getName() {
         return name;
     }
@@ -108,5 +111,13 @@ public class TrelloRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 }

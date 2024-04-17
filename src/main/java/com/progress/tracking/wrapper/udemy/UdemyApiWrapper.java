@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
 import com.progress.tracking.util.WsUtil;
-import com.progress.tracking.util.exception.ApiExecutionException;
+import com.progress.tracking.util.exception.WrapperExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourseSearch;
 import com.progress.tracking.wrapper.udemy.pojo.Result;
@@ -69,9 +69,9 @@ public class UdemyApiWrapper {
      * @throws InvalidParameterException If the search string is null or blank.
      * @throws InvalidParameterException If the page size is null or less than 5.
      * @throws InvalidParameterException If the page is null or less than 1.
-     * @throws ApiExecutionException     If an error occurs during the API call.
+     * @throws WrapperExecutionException     If an error occurs during the API call.
      */
-    public UdemyCourseSearch searchCourse(final String search, final Integer pageSize, final Integer page) throws InvalidParameterException, ApiExecutionException {
+    public UdemyCourseSearch searchCourse(final String search, final Integer pageSize, final Integer page) throws InvalidParameterException, WrapperExecutionException {
         if (search == null || search.isBlank())
             throw new InvalidParameterException("search");
 
@@ -90,7 +90,7 @@ public class UdemyApiWrapper {
         try {
             response = sendRequest(BASE_URL, query);
         } catch (Exception e) {
-            throw new ApiExecutionException("An error occurred while searching for the specified course.", e);
+            throw new WrapperExecutionException("An error occurred while searching for the specified course.", e);
         }
 
         final UdemyCourseSearch ret = new UdemyCourseSearch();
@@ -125,9 +125,9 @@ public class UdemyApiWrapper {
      * @return {@linkplain UdemyCourseCurriculum} object representing the course curriculum.
      * @throws InvalidParameterException If the course ID is null.
      * @throws InvalidParameterException If the page size is null or less than 5.
-     * @throws ApiExecutionException     If an error occurs during the API call.
+     * @throws WrapperExecutionException     If an error occurs during the API call.
      */
-    public UdemyCourseCurriculum getCourseCurriculum(final Integer courseID, final Integer pageSize) throws InvalidParameterException, ApiExecutionException {
+    public UdemyCourseCurriculum getCourseCurriculum(final Integer courseID, final Integer pageSize) throws InvalidParameterException, WrapperExecutionException {
         if (courseID == null)
             throw new InvalidParameterException("courseID");
 
@@ -145,11 +145,11 @@ public class UdemyApiWrapper {
             try {
                 response = sendRequest(url, query);
             } catch (Exception e) {
-                throw new ApiExecutionException("An error occurred while searching for the curriculum for the specified course.", e);
+                throw new WrapperExecutionException("An error occurred while searching for the curriculum for the specified course.", e);
             }
 
             if (response == null)
-                throw new ApiExecutionException("Couldn't get a valid response while searching for course curriculum.");
+                throw new WrapperExecutionException("Couldn't get a valid response while searching for course curriculum.");
 
             results.addAll(response.getResults());
 
