@@ -1,13 +1,13 @@
 package com.progress.tracking.rest.response;
 
 public class CourseToTrelloResponse {
-    private String boardUrl;
+    private String cardUrl;
 
-    public String getBoardUrl() {
-        return boardUrl;
+    public String getCardUrl() {
+        return cardUrl;
     }
 
-    public void setBoardUrl(String boardUrl) {
-        this.boardUrl = boardUrl;
+    public void setCardUrl(String cardUrl) {
+        this.cardUrl = cardUrl;
     }
 }
