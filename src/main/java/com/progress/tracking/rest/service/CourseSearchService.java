@@ -7,10 +7,13 @@ import com.progress.tracking.rest.response.SearchCourseResponse;
 import com.progress.tracking.util.exception.CourseNotFoundException;
 import com.progress.tracking.wrapper.udemy.UdemyApiWrapper;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
-import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourseSearch;
+import com.progress.tracking.wrapper.udemy.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Service class for searching courses on different platforms.
@@ -36,8 +39,8 @@ public class CourseSearchService {
             throw new CourseNotFoundException(req.getCourse(), "Udemy");
 
         for (UdemyCourse udemyCourse : ret.getCourses()) {
-            final UdemyCourseCurriculum courseCurriculum = uWrapper.getCourseCurriculum(udemyCourse.getId(), 100);
-            final Course course = this.courseMapper.courseFromUdemy(udemyCourse, courseCurriculum);
+            final Map<Result, List<Result>> chapters = uWrapper.getCourseCurriculum(udemyCourse.getId(), 100);
+            final Course course = this.courseMapper.courseFromUdemy(udemyCourse, chapters);
 
             if (course == null)
                 continue;

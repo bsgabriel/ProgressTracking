@@ -2,7 +2,6 @@ package com.progress.tracking.wrapper.udemy;
 
 import com.google.gson.Gson;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
-import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
 import com.progress.tracking.util.WsUtil;
 import com.progress.tracking.util.exception.WrapperExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
@@ -122,12 +121,12 @@ public class UdemyApiWrapper {
      *
      * @param courseID Udemy course ID.
      * @param pageSize The page size for the search results.
-     * @return {@linkplain UdemyCourseCurriculum} object representing the course curriculum.
+     * @return {@linkplain Map} where the keys represent chapters and the values represent lists of lessons, representing the course curriculum.
      * @throws InvalidParameterException If the course ID is null.
      * @throws InvalidParameterException If the page size is null or less than 5.
      * @throws WrapperExecutionException     If an error occurs during the API call.
      */
-    public UdemyCourseCurriculum getCourseCurriculum(final Integer courseID, final Integer pageSize) throws InvalidParameterException, WrapperExecutionException {
+    public Map<Result, List<Result>> getCourseCurriculum(final Integer courseID, final Integer pageSize) throws InvalidParameterException, WrapperExecutionException {
         if (courseID == null)
             throw new InvalidParameterException("courseID");
 
@@ -159,9 +158,7 @@ public class UdemyApiWrapper {
             url = response.getNext();
         } while (url != null && !url.trim().isEmpty());
 
-        final UdemyCourseCurriculum course = new UdemyCourseCurriculum();
-        course.setChapters(fromResultListToMap(results));
-        return course;
+        return fromResultListToMap(results);
     }
 
     /**
