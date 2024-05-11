@@ -3,7 +3,6 @@ package com.progress.tracking;
 import com.progress.tracking.rest.entity.Course;
 import com.progress.tracking.rest.mapper.CourseMapper;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
-import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
 import com.progress.tracking.util.exception.WrapperExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.wrapper.trello.TrelloApiWrapper;
@@ -12,6 +11,7 @@ import com.progress.tracking.wrapper.udemy.UdemyApiWrapper;
 import com.progress.tracking.wrapper.udemy.pojo.Result;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class created to test the integration of platforms.
@@ -69,9 +69,9 @@ public class IntegrationTest {
             }
 
             UdemyCourse uCourse = results.get(0);
-            UdemyCourseCurriculum curriculum = getuWrapper().getCourseCurriculum(uCourse.getId(), 100);
+            Map<Result, List<Result>> curriculum = getuWrapper().getCourseCurriculum(uCourse.getId(), 100);
 
-            if (curriculum == null || curriculum.getChapters().isEmpty()) {
+            if (curriculum == null || curriculum.isEmpty()) {
                 System.out.println("Couldn't find the course curriculum");
                 return;
             }
@@ -91,8 +91,8 @@ public class IntegrationTest {
             attachCourseLink(card.getId(), "Link", course.getUrl());
 
             int idxItem = 1;
-            for (Result chapter : curriculum.getChapters().keySet()) {
-                List<Result> lectures = curriculum.getChapters().get(chapter);
+            for (Result chapter : curriculum.keySet()) {
+                List<Result> lectures = curriculum.get(chapter);
                 if (lectures == null || lectures.isEmpty())
                     continue;
 

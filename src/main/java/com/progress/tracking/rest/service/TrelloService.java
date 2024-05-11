@@ -3,6 +3,7 @@ package com.progress.tracking.rest.service;
 import com.progress.tracking.rest.entity.Chapter;
 import com.progress.tracking.wrapper.trello.TrelloApiWrapper;
 import com.progress.tracking.wrapper.trello.pojo.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+@Slf4j
 @Service
 public class TrelloService {
 
@@ -33,14 +35,14 @@ public class TrelloService {
         final Board board = tWrapper.createBoard(boardName, desc);
 
         StringBuilder sb = new StringBuilder();
+        sb.append("Created board:").append("\n");
         sb.append("\t").append("name: ").append(board.getName()).append("\n");
         sb.append("\t").append("description: ").append(board.getDesc()).append("\n");
         sb.append("\t").append("board's ID: ").append(board.getId()).append("\n");
         sb.append("\t").append("organization's ID: ").append(board.getIdOrganization()).append("\n");
         sb.append("\t").append("url: ").append(board.getUrl()).append("\n");
-        sb.append("\t").append("short url: ").append(board.getShortUrl()).append("\n");
-        System.out.println(sb);
-
+        sb.append("\t").append("short url: ").append(board.getShortUrl());
+        log.info(sb.toString());
         return board;
     }
 
@@ -51,8 +53,8 @@ public class TrelloService {
         sb.append("Created list:").append("\n");
         sb.append("\t").append("name: ").append(list.getName()).append("\n");
         sb.append("\t").append("id: ").append(list.getId()).append("\n");
-        sb.append("\t").append("board's ID: ").append(list.getIdBoard()).append("\n");
-        System.out.println(sb);
+        sb.append("\t").append("board's ID: ").append(list.getIdBoard());
+        log.info(sb.toString());
 
         return list;
     }
@@ -68,8 +70,8 @@ public class TrelloService {
         sb.append("\t").append("list: ").append(card.getIdList()).append("\n");
         sb.append("\t").append("board: ").append(card.getIdBoard()).append("\n");
         sb.append("\t").append("url: ").append(card.getUrl()).append("\n");
-        sb.append("\t").append("short url: ").append(card.getShortUrl()).append("\n");
-        System.out.println(sb);
+        sb.append("\t").append("short url: ").append(card.getShortUrl());
+        log.info(sb.toString());
 
         return card;
     }
@@ -77,23 +79,23 @@ public class TrelloService {
     public void attachCourseLink(final TrelloApiWrapper tWrapper, final String idCard, final String attName, final String attUrl) {
         CardAttachment att = tWrapper.createCardUrlAttachment(idCard, attName, attUrl);
         StringBuilder sb = new StringBuilder();
-        sb.append("Anexo criado:").append("\n");
+        sb.append("Attatchment created:").append("\n");
         sb.append("\t").append("id: ").append(att.getId()).append("\n");
         sb.append("\t").append("name: ").append(att.getName()).append("\n");
-        sb.append("\t").append("url: ").append(att.getUrl()).append("\n");
-        System.out.println(sb);
+        sb.append("\t").append("url: ").append(att.getUrl());
+        log.info(sb.toString());
     }
 
     private Checklist createChecklistForCard(final TrelloApiWrapper tWrapper, final String idCard, final String name) {
         Checklist lst = tWrapper.createChecklist(idCard, name);
         StringBuilder sb = new StringBuilder();
-        sb.append("Checklist:").append("\n");
+        sb.append("Checklist created:").append("\n");
         sb.append("\t").append("id: ").append(lst.getId()).append("\n");
         sb.append("\t").append("name: ").append(lst.getName()).append("\n");
         sb.append("\t").append("card's ID: ").append(lst.getIdCard()).append("\n");
         sb.append("\t").append("board's ID: ").append(lst.getIdBoard()).append("\n");
-        sb.append("\t").append("items: ").append(lst.getItems()).append("\n");
-        System.out.println(sb);
+        sb.append("\t").append("items: ").append(lst.getItems());
+        log.info(sb.toString());
 
         return lst;
     }
@@ -101,12 +103,12 @@ public class TrelloService {
     private void createItemForChecklist(final TrelloApiWrapper tWrapper, final String idChecklist, final String name, final Integer idx) {
         ChecklistItem item = tWrapper.createChecklistItem(idChecklist, name, idx);
         StringBuilder sb = new StringBuilder();
-        sb.append("Checklist item:").append("\n");
+        sb.append("Checklist item created:").append("\n");
         sb.append("\t").append("id: ").append(item.getId()).append("\n");
         sb.append("\t").append("name: ").append(item.getName()).append("\n");
         sb.append("\t").append("checklist's ID: ").append(item.getIdChecklist()).append("\n");
-        sb.append("\t").append("index: ").append(idx).append("\n");
-        System.out.println(sb);
+        sb.append("\t").append("index: ").append(idx);
+        log.info(sb.toString());
     }
 
     public TrelloList searchListFromBoard(final TrelloApiWrapper tWrapper, final String idBoard, final String list) {
@@ -148,7 +150,7 @@ public class TrelloService {
             try {
                 latch.await();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("Error while creating checklist item", e);
             }
         }
     }

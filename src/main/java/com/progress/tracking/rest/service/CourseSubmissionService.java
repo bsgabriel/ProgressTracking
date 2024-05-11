@@ -25,7 +25,7 @@ public class CourseSubmissionService {
         this.trelloExec.createChecklists(tWrapper, req.getCourse().getChapters(), card);
 
         final CourseToTrelloResponse response = new CourseToTrelloResponse();
-        response.setBoardUrl(board.getUrl());
+        response.setCardUrl(card.getUrl());
         return response;
     }
 

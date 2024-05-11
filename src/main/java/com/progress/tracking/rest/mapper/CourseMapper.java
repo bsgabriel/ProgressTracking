@@ -3,7 +3,6 @@ package com.progress.tracking.rest.mapper;
 import com.progress.tracking.rest.entity.Chapter;
 import com.progress.tracking.rest.entity.Course;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
-import com.progress.tracking.wrapper.udemy.entity.UdemyCourseCurriculum;
 import com.progress.tracking.wrapper.udemy.pojo.Result;
 import com.progress.tracking.wrapper.udemy.pojo.VisibleInstructor;
 import org.springframework.stereotype.Service;
@@ -22,10 +21,10 @@ public class CourseMapper {
      * Maps a {@linkplain UdemyCourse} object to a {@linkplain Course} object, including the chapters and lessons from the Udemy course curriculum.
      *
      * @param udemyCourse           The {@linkplain UdemyCourse} object to map.
-     * @param udemyCourseCurriculum The {@linkplain UdemyCourseCurriculum} object containing the chapters and lessons for the Udemy course.
+     * @param chapters The {@linkplain Map} object containing the chapters and lessons for the Udemy course.
      * @return A Course object mapped from the {@linkplain UdemyCourse}.
      */
-    public Course courseFromUdemy(final UdemyCourse udemyCourse, final UdemyCourseCurriculum udemyCourseCurriculum) {
+    public Course courseFromUdemy(final UdemyCourse udemyCourse, final Map<Result, List<Result>> chapters) {
         if (udemyCourse == null)
             return null;
 
@@ -35,13 +34,13 @@ public class CourseMapper {
         course.setDesc(createCourseDescription(udemyCourse.getHeadline(), udemyCourse.getInstructors()));
         course.setImage(udemyCourse.getImage());
         course.setUrl(udemyCourse.getUrl());
-        course.setChapters(createChapetrsList(udemyCourseCurriculum.getChapters()));
+        course.setChapters(createChapetrsList(chapters));
 
         return course;
     }
 
     /**
-     * Converts the {@linkplain  UdemyCourseCurriculum} into a list of chapters for the {@linkplain Course}.
+     * Converts the {@linkplain Map} into a list of chapters for the {@linkplain Course}.
      * Each chapter contains its name and a list of lessons.
      *
      * @param uChapters A map representing Udemy course chapters and their corresponding lectures.
