@@ -1,4 +1,4 @@
-package com.progress.tracking.rest;
+package com.progress.tracking.rest.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
