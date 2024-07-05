@@ -2,6 +2,7 @@ package com.progress.tracking.rest.util;
 
 import com.progress.tracking.util.exception.CourseNotFoundException;
 import com.progress.tracking.util.exception.InvalidParameterException;
+import com.progress.tracking.util.exception.PlatformNotFoundException;
 import com.progress.tracking.util.exception.WrapperExecutionException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,12 @@ public class ApiExceptionHandler {
     @ExceptionHandler(CourseNotFoundException.class)
     public ProblemDetail handleCourseNotFoundException(final CourseNotFoundException ex) {
         log.error("Course not found", ex);
+        return createProblemDetail(ex, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(PlatformNotFoundException.class)
+    public ProblemDetail handlePlatformNotFoundException(final PlatformNotFoundException ex) {
+        log.error("Platform not found", ex);
         return createProblemDetail(ex, HttpStatus.NOT_FOUND);
     }
 
