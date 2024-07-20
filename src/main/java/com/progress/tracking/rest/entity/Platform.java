@@ -24,6 +24,7 @@ public class Platform {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Field {
         private String name;
+        private String title;
         private String description;
         private boolean required;
         private String defaultValue;

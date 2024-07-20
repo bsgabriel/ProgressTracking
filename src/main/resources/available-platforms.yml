@@ -5,9 +5,11 @@ platforms:
         logo: "https://logosmarcas.net/wp-content/uploads/2021/11/Udemy-Logo.png"
       fields:
         - name: "clientId"
+          title: "Client ID"
           description: "Client ID for authentication"
           required: true
         - name: "clientSecret"
+          title: "Client secret"
           description: "Client Secret for authentication"
           required: true
   submission:
@@ -16,20 +18,25 @@ platforms:
         logo: "https://cdn.icon-icons.com/icons2/3041/PNG/512/trello_logo_icon_189227.png"
       fields:
         - name: "trelloApiKey"
+          title: "Api key"
           description: "API Key for Trello"
           required: true
         - name: "trelloApiToken"
+          title: "Api token"
           description: "API Token for Trello"
           required: true
         - name: "boardName"
+          title: "Board name"
           description: "Name of the Trello board"
           required: false
           default: "ProgressTracking"
         - name: "boardDescription"
+          title: "Board description"
           description: "Description of the Trello board"
           required: false
           default: "Board created by ProgressTracking"
         - name: "listName"
+          title: "List name"
           description: "Name of the list within the board"
           required: false
           default: "Course Stack"
