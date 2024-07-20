@@ -8,3 +8,5 @@ logging:
 spring:
   config:
     import: "classpath:available-platforms.yml"
+  cors:
+    allowed-origins: 'http://localhost:8081'
