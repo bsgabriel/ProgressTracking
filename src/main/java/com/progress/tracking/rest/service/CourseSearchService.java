@@ -47,7 +47,8 @@ public class CourseSearchService {
 
             response.getCourses().add(course);
         }
-
+        response.setCurrentPage(ret.getCurrentPage());
+        response.setNextPage(ret.getNextPage());
         return response;
     }
 }
