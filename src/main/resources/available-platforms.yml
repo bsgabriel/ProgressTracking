@@ -4,11 +4,11 @@ platforms:
         name: "UDEMY"
         logo: "https://logosmarcas.net/wp-content/uploads/2021/11/Udemy-Logo.png"
       fields:
-        - name: "clientId"
+        - name: "udemyClientId"
           title: "Client ID"
           description: "Client ID for authentication"
           required: true
-        - name: "clientSecret"
+        - name: "udemyClientSecret"
           title: "Client secret"
           description: "Client Secret for authentication"
           required: true
