@@ -49,6 +49,7 @@ public class CourseSearchService {
         }
         response.setCurrentPage(ret.getCurrentPage());
         response.setNextPage(ret.getNextPage());
+        response.setCount(ret.getCount());
         return response;
     }
 }

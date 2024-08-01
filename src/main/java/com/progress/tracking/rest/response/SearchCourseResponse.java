@@ -10,6 +10,7 @@ public class SearchCourseResponse {
     private Integer nextPage;
     private Integer previsouPage;
     private List<Course> courses;
+    private Integer count;
 
     public Integer getCurrentPage() {
         return currentPage;
@@ -43,5 +44,13 @@ public class SearchCourseResponse {
 
     public void setCourses(List<Course> courses) {
         this.courses = courses;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }

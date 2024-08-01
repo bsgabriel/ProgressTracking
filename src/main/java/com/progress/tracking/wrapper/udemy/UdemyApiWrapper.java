@@ -94,7 +94,7 @@ public class UdemyApiWrapper {
 
         final UdemyCourseSearch ret = new UdemyCourseSearch();
         ret.setCurrentPage(page);
-
+        ret.setCount(response.getCount());
         if (response.getNext() != null && !response.getNext().trim().isEmpty())
             ret.setNextPage(page + 1);
 

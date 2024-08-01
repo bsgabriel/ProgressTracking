@@ -8,6 +8,7 @@ public class UdemyCourseSearch {
     private Integer nextPage;
     private Integer previousPage;
     private List<UdemyCourse> courses;
+    private Integer count;
 
     public Integer getCurrentPage() {
         return currentPage;
@@ -41,5 +42,13 @@ public class UdemyCourseSearch {
 
     public void setCourses(List<UdemyCourse> courses) {
         this.courses = courses;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }
