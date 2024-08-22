@@ -1,6 +1,6 @@
 package com.progress.tracking.rest.controller;
 
-import com.progress.tracking.rest.entity.Platform;
+import com.progress.tracking.rest.dto.Platform;
 import com.progress.tracking.rest.service.PlatformService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.progress.tracking.rest.service;
 
-import com.progress.tracking.rest.entity.Course;
+import com.progress.tracking.rest.dto.CourseDTO;
 import com.progress.tracking.rest.mapper.CourseMapper;
 import com.progress.tracking.rest.request.SearchCourseRequest;
 import com.progress.tracking.rest.response.SearchCourseResponse;
@@ -40,7 +40,7 @@ public class CourseSearchService {
 
         for (UdemyCourse udemyCourse : ret.getCourses()) {
             final Map<Result, List<Result>> chapters = uWrapper.getCourseCurriculum(udemyCourse.getId(), 100);
-            final Course course = this.courseMapper.courseFromUdemy(udemyCourse, chapters);
+            final CourseDTO course = this.courseMapper.courseFromUdemy(udemyCourse, chapters);
 
             if (course == null)
                 continue;

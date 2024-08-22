@@ -1,6 +1,6 @@
 package com.progress.tracking.rest.response;
 
-import com.progress.tracking.rest.entity.Course;
+import com.progress.tracking.rest.dto.CourseDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ public class SearchCourseResponse {
     private Integer currentPage;
     private Integer nextPage;
     private Integer previsouPage;
-    private List<Course> courses;
+    private List<CourseDTO> courses;
     private Integer count;
 
     public Integer getCurrentPage() {
@@ -36,13 +36,13 @@ public class SearchCourseResponse {
         this.previsouPage = previsouPage;
     }
 
-    public List<Course> getCourses() {
+    public List<CourseDTO> getCourses() {
         if (this.courses == null)
             courses = new ArrayList<>();
         return courses;
     }
 
-    public void setCourses(List<Course> courses) {
+    public void setCourses(List<CourseDTO> courses) {
         this.courses = courses;
     }
 

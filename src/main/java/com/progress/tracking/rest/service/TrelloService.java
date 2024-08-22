@@ -1,6 +1,6 @@
 package com.progress.tracking.rest.service;
 
-import com.progress.tracking.rest.entity.Chapter;
+import com.progress.tracking.rest.dto.ChapterDTO;
 import com.progress.tracking.wrapper.trello.TrelloApiWrapper;
 import com.progress.tracking.wrapper.trello.pojo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -131,8 +131,8 @@ public class TrelloService {
         return tList;
     }
 
-    public void createChecklists(final TrelloApiWrapper tWrapper, final List<Chapter> chapters, final Card card) {
-        for (Chapter chapter : chapters) {
+    public void createChecklists(final TrelloApiWrapper tWrapper, final List<ChapterDTO> chapters, final Card card) {
+        for (ChapterDTO chapter : chapters) {
             final List<String> lessons = chapter.getLessons();
             if (lessons == null || lessons.isEmpty())
                 continue;

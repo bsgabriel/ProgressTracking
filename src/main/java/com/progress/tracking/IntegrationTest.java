@@ -1,6 +1,6 @@
 package com.progress.tracking;
 
-import com.progress.tracking.rest.entity.Course;
+import com.progress.tracking.rest.dto.CourseDTO;
 import com.progress.tracking.rest.mapper.CourseMapper;
 import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
 import com.progress.tracking.util.exception.WrapperExecutionException;
@@ -76,7 +76,7 @@ public class IntegrationTest {
                 return;
             }
 
-            Course course = new CourseMapper().courseFromUdemy(uCourse, curriculum);
+            CourseDTO course = new CourseMapper().courseFromUdemy(uCourse, curriculum);
 
             List<Board> boards = gettWrapper().searchBoardByName(BOARD_NAME);
 
