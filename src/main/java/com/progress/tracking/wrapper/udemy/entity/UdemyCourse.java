@@ -1,10 +1,13 @@
 package com.progress.tracking.wrapper.udemy.entity;
 
 import com.progress.tracking.wrapper.udemy.pojo.VisibleInstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Builder
 public class UdemyCourse {
     private Integer id;
     private String title;
@@ -12,56 +15,6 @@ public class UdemyCourse {
     private List<VisibleInstructor> instructors;
     private String url;
     private String image;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getHeadline() {
-        return headline;
-    }
-
-    public void setHeadline(String headline) {
-        this.headline = headline;
-    }
-
-    public List<VisibleInstructor> getInstructors() {
-        if (instructors == null)
-            instructors = new ArrayList<>();
-        return instructors;
-    }
-
-    public void setInstructors(List<VisibleInstructor> instructors) {
-        this.instructors = instructors;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     @Override
     public String toString() {
