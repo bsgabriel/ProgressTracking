@@ -1,4 +1,4 @@
-package com.progress.tracking.wrapper.udemy.entity;
+package com.progress.tracking.rest.dto.udemy;
 
 import lombok.Builder;
 import lombok.Getter;

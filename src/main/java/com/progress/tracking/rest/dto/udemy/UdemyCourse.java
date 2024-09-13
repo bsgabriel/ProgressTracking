@@ -1,6 +1,5 @@
-package com.progress.tracking.wrapper.udemy.entity;
+package com.progress.tracking.rest.dto.udemy;
 
-import com.progress.tracking.wrapper.udemy.pojo.VisibleInstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,7 +11,7 @@ public class UdemyCourse {
     private Integer id;
     private String title;
     private String headline;
-    private List<VisibleInstructor> instructors;
+    private List<UdemyVisibleInstructorDto> instructors;
     private String url;
     private String image;
 
