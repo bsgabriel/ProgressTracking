@@ -2,9 +2,9 @@ package com.progress.tracking.rest.mapper;
 
 import com.progress.tracking.rest.dto.ChapterDTO;
 import com.progress.tracking.rest.dto.CourseDTO;
-import com.progress.tracking.wrapper.udemy.entity.UdemyCourse;
-import com.progress.tracking.wrapper.udemy.pojo.Result;
-import com.progress.tracking.wrapper.udemy.pojo.VisibleInstructor;
+import com.progress.tracking.rest.dto.udemy.UdemyCourse;
+import com.progress.tracking.rest.dto.udemy.UdemyResultDto;
+import com.progress.tracking.rest.dto.udemy.UdemyVisibleInstructorDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class CourseMapper {
      * @param chapters    The {@linkplain Map} object containing the chapters and lessons for the Udemy course.
      * @return A Course object mapped from the {@linkplain UdemyCourse}.
      */
-    public CourseDTO courseFromUdemy(final UdemyCourse udemyCourse, final Map<Result, List<Result>> chapters) {
+    public CourseDTO courseFromUdemy(final UdemyCourse udemyCourse, final Map<UdemyResultDto, List<UdemyResultDto>> chapters) {
         if (udemyCourse == null)
             return null;
 
@@ -45,19 +45,19 @@ public class CourseMapper {
      * @param uChapters A map representing Udemy course chapters and their corresponding lectures.
      * @return A list of {@linkplain ChapterDTO} objects representing the chapters of the course.
      */
-    private List<ChapterDTO> createChapetrsList(Map<Result, List<Result>> uChapters) {
+    private List<ChapterDTO> createChapetrsList(Map<UdemyResultDto, List<UdemyResultDto>> uChapters) {
         var chapters = new ArrayList<ChapterDTO>();
         if (uChapters == null || uChapters.isEmpty())
             return chapters;
 
         int idxItem = 1;
-        for (Result uChapter : uChapters.keySet()) {
+        for (UdemyResultDto uChapter : uChapters.keySet()) {
             var lectures = uChapters.get(uChapter);
             if (lectures == null || lectures.isEmpty())
                 continue;
 
             var lessons = new ArrayList<String>();
-            for (Result lecture : lectures) {
+            for (UdemyResultDto lecture : lectures) {
                 lessons.add(idxItem + ". " + lecture.getTitle());
                 idxItem++;
             }
@@ -72,20 +72,20 @@ public class CourseMapper {
     }
 
     /**
-     * Creates the course description based on the original description and list of {@linkplain VisibleInstructor}.
+     * Creates the course description based on the original description and list of {@linkplain UdemyVisibleInstructorDto}.
      *
      * @param desc        The description of the course.
      * @param instructors The list of instructors for the course.
      * @return The course description.
      */
-    private String createCourseDescription(final String desc, final List<VisibleInstructor> instructors) {
+    private String createCourseDescription(final String desc, final List<UdemyVisibleInstructorDto> instructors) {
         if (instructors == null || instructors.isEmpty())
             return desc;
 
         final StringBuilder sb = new StringBuilder(desc);
         sb.append("\n\n");
         sb.append(instructors.size() > 1 ? "Instructors: " : "Instructor: ");
-        for (VisibleInstructor instructor : instructors) {
+        for (UdemyVisibleInstructorDto instructor : instructors) {
             sb.append(instructor.getDisplayName());
             if (instructors.indexOf(instructor) != instructors.size() - 1)
                 sb.append(", ");

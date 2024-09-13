@@ -1,56 +1,17 @@
 package com.progress.tracking.rest.response;
 
 import com.progress.tracking.rest.dto.CourseDTO;
+import lombok.Builder;
+import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Builder
 public class SearchCourseResponse {
     private Integer currentPage;
     private Integer nextPage;
     private Integer previsouPage;
     private List<CourseDTO> courses;
     private Integer count;
-
-    public Integer getCurrentPage() {
-        return currentPage;
-    }
-
-    public void setCurrentPage(Integer currentPage) {
-        this.currentPage = currentPage;
-    }
-
-    public Integer getNextPage() {
-        return nextPage;
-    }
-
-    public void setNextPage(Integer nextPage) {
-        this.nextPage = nextPage;
-    }
-
-    public Integer getPrevisouPage() {
-        return previsouPage;
-    }
-
-    public void setPrevisouPage(Integer previsouPage) {
-        this.previsouPage = previsouPage;
-    }
-
-    public List<CourseDTO> getCourses() {
-        if (this.courses == null)
-            courses = new ArrayList<>();
-        return courses;
-    }
-
-    public void setCourses(List<CourseDTO> courses) {
-        this.courses = courses;
-    }
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
 }
