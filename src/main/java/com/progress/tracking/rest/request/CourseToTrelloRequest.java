@@ -1,6 +1,6 @@
 package com.progress.tracking.rest.request;
 
-import com.progress.tracking.rest.entity.Course;
+import com.progress.tracking.rest.dto.CourseDTO;
 
 public class CourseToTrelloRequest {
     private String trelloApiKey;
@@ -8,7 +8,7 @@ public class CourseToTrelloRequest {
     private String boardName;
     private String boardDescription;
     private String listName;
-    private Course course;
+    private CourseDTO course;
 
     public String getTrelloApiKey() {
         return trelloApiKey;
@@ -50,11 +50,11 @@ public class CourseToTrelloRequest {
         this.listName = listName;
     }
 
-    public Course getCourse() {
+    public CourseDTO getCourse() {
         return course;
     }
 
-    public void setCourse(Course course) {
+    public void setCourse(CourseDTO course) {
         this.course = course;
     }
 }

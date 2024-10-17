@@ -1,7 +1,7 @@
 package com.progress.tracking.rest.service;
 
 import com.progress.tracking.rest.config.PlatformConfiguration;
-import com.progress.tracking.rest.entity.Platform;
+import com.progress.tracking.rest.dto.Platform;
 import com.progress.tracking.util.exception.PlatformNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.progress.tracking.rest.config;
 
-import com.progress.tracking.rest.entity.Platform;
+import com.progress.tracking.rest.dto.Platform;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

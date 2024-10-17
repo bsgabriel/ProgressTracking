@@ -1,4 +1,4 @@
-package com.progress.tracking.rest.entity;
+package com.progress.tracking.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
