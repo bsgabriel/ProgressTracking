@@ -113,35 +113,6 @@ public class TrelloApiWrapper {
     }
 
     /**
-     * Creates a Trello board with the provided name and description.
-     *
-     * @param boardName Name of the Trello board.
-     * @param desc      Description of the Trello board.
-     * @return {@linkplain Board} object representing the created board.
-     * @throws InvalidParameterException If the boardName is null or blank.
-     * @throws WrapperExecutionException     If an error occurs during the API call.
-     */
-    public Board createBoard(final String boardName, final String desc) throws InvalidParameterException, WrapperExecutionException {
-        if (boardName == null || boardName.isBlank())
-            throw new InvalidParameterException("boardName");
-
-        final String url = BASE_URL + "boards/";
-        final TrelloRequest req = new TrelloRequest();
-        req.setName(boardName);
-        req.setDescription(desc);
-        req.setDefaultLists(false);
-        req.setDefaultLabels(false);
-        req.setApiKey(apiKey);
-        req.setApiToken(apiToken);
-
-        try {
-            return doRequest(url, req, Board.class);
-        } catch (Exception e) {
-            throw new WrapperExecutionException("An error occurred while creating a board. {name='" + boardName + "', description='" + desc + "'}.", e);
-        }
-    }
-
-    /**
      * Creates a Trello list on the specified board with the provided name.
      *
      * @param idBoard Trello board ID.

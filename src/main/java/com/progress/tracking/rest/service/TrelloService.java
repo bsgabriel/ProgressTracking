@@ -1,5 +1,6 @@
 package com.progress.tracking.rest.service;
 
+import com.progress.tracking.rest.client.TrelloClient;
 import com.progress.tracking.rest.dto.ChapterDTO;
 import com.progress.tracking.wrapper.trello.TrelloApiWrapper;
 import com.progress.tracking.wrapper.trello.pojo.*;
@@ -18,32 +19,25 @@ public class TrelloService {
     private static final int MAX_THREADS = 5;
 
     @Autowired
+    private TrelloClient trelloClient;
+
+    @Autowired
     private ThreadPoolTaskExecutor taskExecutor;
 
-    public Board searchBoardByName(final TrelloApiWrapper tWrapper, final String boardName, final String description) {
-        final List<Board> boards = tWrapper.searchBoardByName(boardName);
-        final Board board;
-        if (boards.isEmpty())
-            board = this.createTrelloBoard(tWrapper, boardName, description);
-        else
-            board = boards.get(0);
-
-        return board;
+    public Board searchBoardByName(String boardName, String description, String apiKey, String apiToken) {
+        var boards = trelloClient.searchBoardByName(boardName, apiToken, apiKey).getBoards();
+        return !boards.isEmpty() ? boards.get(0) : this.createTrelloBoard(boardName, description, apiKey, apiToken);
     }
 
-    private Board createTrelloBoard(final TrelloApiWrapper tWrapper, final String boardName, final String desc) {
-        final Board board = tWrapper.createBoard(boardName, desc);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Created board:").append("\n");
-        sb.append("\t").append("name: ").append(board.getName()).append("\n");
-        sb.append("\t").append("description: ").append(board.getDesc()).append("\n");
-        sb.append("\t").append("board's ID: ").append(board.getId()).append("\n");
-        sb.append("\t").append("organization's ID: ").append(board.getIdOrganization()).append("\n");
-        sb.append("\t").append("url: ").append(board.getUrl()).append("\n");
-        sb.append("\t").append("short url: ").append(board.getShortUrl());
-        log.info(sb.toString());
-        return board;
+    private Board createTrelloBoard(String boardName, String desc, String apiKey, String apiToken) {
+        return trelloClient.createBoard(TrelloRequest.builder()
+                .name(boardName)
+                .description(desc)
+                .apiKey(apiKey)
+                .apiToken(apiToken)
+                .defaultLists(false)
+                .defaultLabels(false)
+                .build());
     }
 
     private TrelloList createTrelloList(final TrelloApiWrapper tWrapper, final String idBoard, final String name) {
