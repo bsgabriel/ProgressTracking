@@ -56,32 +56,6 @@ public class TrelloApiWrapper {
     }
 
     /**
-     * Searches for Trello boards based on the provided board name.
-     *
-     * @param boardName Name of the Trello board to search for.
-     * @return List of {@linkplain Board} objects matching the search criteria.
-     * @throws InvalidParameterException If the boardName is null or blank.
-     * @throws WrapperExecutionException     If an error occurs during the API call.
-     */
-    public List<Board> searchBoardByName(final String boardName) throws InvalidParameterException, WrapperExecutionException {
-        if (boardName == null || boardName.isBlank())
-            throw new InvalidParameterException("boardName");
-
-        final String url = BASE_URL + "search";
-
-        final Map<String, String> params = new HashMap<>();
-        params.put("key", apiKey);
-        params.put("token", apiToken);
-        params.put("query", boardName);
-
-        try {
-            return doRequest(url, params, TrelloSearchResponse.class).getBoards();
-        } catch (Exception e) {
-            throw new WrapperExecutionException("An error occurred while searching for the board '" + boardName + "'.", e);
-        }
-    }
-
-    /**
      * Creates a Trello checklist on the specified card with the provided name.
      *
      * @param idCard ID of the Trello card.
