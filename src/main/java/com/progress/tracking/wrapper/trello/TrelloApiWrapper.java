@@ -1,13 +1,11 @@
 package com.progress.tracking.wrapper.trello;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.progress.tracking.util.WsUtil;
-import com.progress.tracking.util.exception.WrapperExecutionException;
 import com.progress.tracking.util.exception.InvalidParameterException;
+import com.progress.tracking.util.exception.WrapperExecutionException;
 import com.progress.tracking.wrapper.trello.pojo.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,38 +78,6 @@ public class TrelloApiWrapper {
             return doRequest(url, params, TrelloSearchResponse.class).getBoards();
         } catch (Exception e) {
             throw new WrapperExecutionException("An error occurred while searching for the board '" + boardName + "'.", e);
-        }
-    }
-
-    /**
-     * Creates a Trello card on the specified list with the provided name and description.
-     *
-     * @param idList ID of the Trello list.
-     * @param name   Name of the Trello card.
-     * @param desc   Description of the Trello card.
-     * @return {@linkplain Card} object representing the created card.
-     * @throws InvalidParameterException If the either the idList or name is null or blank.
-     * @throws WrapperExecutionException     If an error occurs during the API call.
-     */
-    public Card createCard(final String idList, final String name, final String desc) throws InvalidParameterException, WrapperExecutionException {
-        if (idList == null || idList.isBlank())
-            throw new InvalidParameterException("idList");
-
-        if (name == null || name.isBlank())
-            throw new InvalidParameterException("name");
-
-        final String url = BASE_URL + "cards/";
-        final TrelloRequest req = new TrelloRequest();
-        req.setName(name);
-        req.setDescription(desc);
-        req.setIdList(idList);
-        req.setApiKey(apiKey);
-        req.setApiToken(apiToken);
-
-        try {
-            return doRequest(url, req, Card.class);
-        } catch (Exception e) {
-            throw new WrapperExecutionException("An error occured while creating a card.", e);
         }
     }
 
