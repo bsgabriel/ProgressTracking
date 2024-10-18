@@ -40,19 +40,6 @@ public class TrelloService {
                 .build());
     }
 
-    private TrelloList createTrelloList(final TrelloApiWrapper tWrapper, final String idBoard, final String name) {
-        TrelloList list = tWrapper.createList(idBoard, name);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Created list:").append("\n");
-        sb.append("\t").append("name: ").append(list.getName()).append("\n");
-        sb.append("\t").append("id: ").append(list.getId()).append("\n");
-        sb.append("\t").append("board's ID: ").append(list.getIdBoard());
-        log.info(sb.toString());
-
-        return list;
-    }
-
     public Card createTrelloCard(final TrelloApiWrapper tWrapper, final String idList, final String name, final String desc) {
         Card card = tWrapper.createCard(idList, name, desc);
 
@@ -105,24 +92,18 @@ public class TrelloService {
         log.info(sb.toString());
     }
 
-    public TrelloList searchListFromBoard(final TrelloApiWrapper tWrapper, final String idBoard, final String list) {
-        List<TrelloList> lists = tWrapper.getListsFromBoard(idBoard);
+    public TrelloList searchListFromBoard(String idBoard, String listName, String apiKey, String apiToken) {
+        return trelloClient.getListsFromBoard(idBoard, apiKey, apiToken)
+                .stream()
+                .filter(list -> list.getName().equalsIgnoreCase(listName))
+                .findFirst()
+                .orElse(trelloClient.createList(TrelloRequest.builder()
+                        .name(listName)
+                        .idBoard(idBoard)
+                        .apiKey(apiKey)
+                        .apiToken(apiToken)
+                        .build()));
 
-        if (lists == null || lists.isEmpty())
-            return createTrelloList(tWrapper, idBoard, list);
-
-        TrelloList tList = null;
-        for (TrelloList l : lists) {
-            if (l.getName().equalsIgnoreCase(list)) {
-                tList = l;
-                break;
-            }
-        }
-
-        if (tList == null)
-            return createTrelloList(tWrapper, idBoard, list);
-
-        return tList;
     }
 
     public void createChecklists(final TrelloApiWrapper tWrapper, final List<ChapterDTO> chapters, final Card card) {

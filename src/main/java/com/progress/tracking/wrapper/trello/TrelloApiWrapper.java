@@ -84,65 +84,6 @@ public class TrelloApiWrapper {
     }
 
     /**
-     * Retrieves lists from a Trello board based on the provided board ID.
-     *
-     * @param boardId Trello board ID.
-     * @return List of {@linkplain TrelloList} objects associated with the board.
-     * @throws InvalidParameterException If the boardId is null or blank.
-     * @throws WrapperExecutionException     If an error occurs during the API call.
-     */
-    public List<TrelloList> getListsFromBoard(final String boardId) throws InvalidParameterException, WrapperExecutionException {
-        if (boardId == null || boardId.isBlank())
-            throw new InvalidParameterException("boardId");
-
-        final String url = BASE_URL + "boards/" + boardId + "/lists";
-
-        final Map<String, String> params = new HashMap<>();
-        params.put("key", apiKey);
-        params.put("token", apiToken);
-
-        final String jsonResponse;
-        try {
-            jsonResponse = WsUtil.sendGet(url, createHeader(), params);
-        } catch (Exception e) {
-            throw new WrapperExecutionException("An error occurred while retrieving lists from the board: " + boardId, e);
-        }
-
-        return gson.fromJson(jsonResponse, new TypeToken<ArrayList<TrelloList>>() {
-        }.getType());
-    }
-
-    /**
-     * Creates a Trello list on the specified board with the provided name.
-     *
-     * @param idBoard Trello board ID.
-     * @param name    Name of the Trello list.
-     * @return {@linkplain TrelloList} object representing the created list.
-     * @throws InvalidParameterException If the either the idBoard or name is null or blank.
-     * @throws WrapperExecutionException     If an error occurs during the API call.
-     */
-    public TrelloList createList(final String idBoard, final String name) throws InvalidParameterException, WrapperExecutionException {
-        if (idBoard == null || idBoard.isBlank())
-            throw new InvalidParameterException("idBoard");
-
-        if (name == null || name.isBlank())
-            throw new InvalidParameterException("name");
-
-        final String url = BASE_URL + "list/";
-        final TrelloRequest req = new TrelloRequest();
-        req.setName(name);
-        req.setIdBoard(idBoard);
-        req.setApiToken(apiToken);
-        req.setApiKey(apiKey);
-
-        try {
-            return doRequest(url, req, TrelloList.class);
-        } catch (Exception e) {
-            throw new WrapperExecutionException("An error occurred while creating a list into the board: " + idBoard, e);
-        }
-    }
-
-    /**
      * Creates a Trello card on the specified list with the provided name and description.
      *
      * @param idList ID of the Trello list.
