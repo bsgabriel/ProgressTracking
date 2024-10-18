@@ -20,7 +20,7 @@ public class CourseSubmissionService {
         final TrelloApiWrapper tWrapper = TrelloApiWrapper.initialize(req.getTrelloApiKey(), req.getTrelloApiToken());
         final Board board = this.trelloExec.searchBoardByName(req.getBoardName(), req.getBoardDescription(), req.getTrelloApiKey(), req.getTrelloApiToken());
         final TrelloList list = this.trelloExec.searchListFromBoard(board.getId(), req.getListName(), req.getTrelloApiKey(), req.getTrelloApiToken());
-        final Card card = this.trelloExec.createTrelloCard(tWrapper, list.getId(), req.getCourse().getName(), req.getCourse().getDesc());
+        final Card card = this.trelloExec.createTrelloCard(list.getId(), req.getCourse().getName(), req.getCourse().getDesc(), req.getTrelloApiKey(), req.getTrelloApiToken());
         this.trelloExec.attachCourseLink(tWrapper, card.getId(), "Link", req.getCourse().getUrl());
         this.trelloExec.createChecklists(tWrapper, req.getCourse().getChapters(), card);
 

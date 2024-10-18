@@ -1,9 +1,6 @@
 package com.progress.tracking.rest.client;
 
-import com.progress.tracking.wrapper.trello.pojo.Board;
-import com.progress.tracking.wrapper.trello.pojo.TrelloList;
-import com.progress.tracking.wrapper.trello.pojo.TrelloRequest;
-import com.progress.tracking.wrapper.trello.pojo.TrelloSearchResponse;
+import com.progress.tracking.wrapper.trello.pojo.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,4 +27,7 @@ public interface TrelloClient {
 
     @PostMapping("/list")
     TrelloList createList(@RequestBody TrelloRequest trelloRequest);
+
+    @PostMapping("/cards")
+    Card createCard(@RequestBody TrelloRequest trelloRequest);
 }

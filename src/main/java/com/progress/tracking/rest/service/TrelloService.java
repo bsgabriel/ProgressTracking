@@ -40,21 +40,14 @@ public class TrelloService {
                 .build());
     }
 
-    public Card createTrelloCard(final TrelloApiWrapper tWrapper, final String idList, final String name, final String desc) {
-        Card card = tWrapper.createCard(idList, name, desc);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Created card:").append("\n");
-        sb.append("\t").append("id: ").append(card.getId()).append("\n");
-        sb.append("\t").append("name: ").append(card.getName()).append("\n");
-        sb.append("\t").append("description: ").append(card.getDescription()).append("\n");
-        sb.append("\t").append("list: ").append(card.getIdList()).append("\n");
-        sb.append("\t").append("board: ").append(card.getIdBoard()).append("\n");
-        sb.append("\t").append("url: ").append(card.getUrl()).append("\n");
-        sb.append("\t").append("short url: ").append(card.getShortUrl());
-        log.info(sb.toString());
-
-        return card;
+    public Card createTrelloCard(String idList, String cardName, String desc, String apiKey, String apiToken) {
+        return trelloClient.createCard(TrelloRequest.builder()
+                .idList(idList)
+                .name(cardName)
+                .description(desc)
+                .apiToken(apiToken)
+                .apiKey(apiKey)
+                .build());
     }
 
     public void attachCourseLink(final TrelloApiWrapper tWrapper, final String idCard, final String attName, final String attUrl) {
