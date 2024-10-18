@@ -25,19 +25,17 @@ public class TrelloService {
     private ThreadPoolTaskExecutor taskExecutor;
 
     public Board searchBoardByName(String boardName, String description, String apiKey, String apiToken) {
-        var boards = trelloClient.searchBoardByName(boardName, apiToken, apiKey).getBoards();
-        return !boards.isEmpty() ? boards.get(0) : this.createTrelloBoard(boardName, description, apiKey, apiToken);
-    }
-
-    private Board createTrelloBoard(String boardName, String desc, String apiKey, String apiToken) {
-        return trelloClient.createBoard(TrelloRequest.builder()
-                .name(boardName)
-                .description(desc)
-                .apiKey(apiKey)
-                .apiToken(apiToken)
-                .defaultLists(false)
-                .defaultLabels(false)
-                .build());
+        return trelloClient.searchBoardByName(boardName, apiToken, apiKey).getBoards()
+                .stream()
+                .findFirst()
+                .orElse(trelloClient.createBoard(TrelloRequest.builder()
+                        .name(boardName)
+                        .description(description)
+                        .apiKey(apiKey)
+                        .apiToken(apiToken)
+                        .defaultLists(false)
+                        .defaultLabels(false)
+                        .build()));
     }
 
     public Card createTrelloCard(String idList, String cardName, String desc, String apiKey, String apiToken) {
