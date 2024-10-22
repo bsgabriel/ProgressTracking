@@ -4,10 +4,11 @@ import com.google.gson.Gson;
 import com.progress.tracking.util.WsUtil;
 import com.progress.tracking.util.exception.InvalidParameterException;
 import com.progress.tracking.util.exception.WrapperExecutionException;
-import com.progress.tracking.wrapper.trello.pojo.*;
+import com.progress.tracking.wrapper.trello.pojo.Checklist;
+import com.progress.tracking.wrapper.trello.pojo.ChecklistItem;
+import com.progress.tracking.wrapper.trello.pojo.TrelloRequest;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -112,37 +113,6 @@ public class TrelloApiWrapper {
             return doRequest(url, req, ChecklistItem.class);
         } catch (Exception e) {
             throw new WrapperExecutionException("An error ocurred while creating a checklist item for the checklist: " + idChecklist, e);
-        }
-    }
-
-    /**
-     * Attaches a link to the specified Trello card.
-     *
-     * @param idCard ID of the Trello card.
-     * @param name   Name to be displayed for the attached link. If null, the link itself will be displayed.
-     * @param attUrl URL of the link to be attached.
-     * @return {@linkplain CardAttachment} object representing the created card attachment.
-     * @throws InvalidParameterException If idCard or attUrl is null or blank.
-     * @throws WrapperExecutionException     If an error occurs during the API call.
-     */
-    public CardAttachment createCardUrlAttachment(final String idCard, final String name, final String attUrl) throws InvalidParameterException, WrapperExecutionException {
-        if (idCard == null || idCard.isBlank())
-            throw new InvalidParameterException("idCard");
-
-        if (attUrl == null || attUrl.isBlank())
-            throw new InvalidParameterException("attUrl");
-
-        final String url = BASE_URL + "cards/" + idCard + "/attachments";
-        final TrelloRequest req = new TrelloRequest();
-        req.setName(name);
-        req.setUrl(attUrl);
-        req.setApiKey(apiKey);
-        req.setApiToken(apiToken);
-
-        try {
-            return doRequest(url, req, CardAttachment.class);
-        } catch (Exception e) {
-            throw new WrapperExecutionException("An error ocurred while creating an attachment for the card: " + idCard, e);
         }
     }
 

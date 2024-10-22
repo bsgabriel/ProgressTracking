@@ -48,14 +48,13 @@ public class TrelloService {
                 .build());
     }
 
-    public void attachCourseLink(final TrelloApiWrapper tWrapper, final String idCard, final String attName, final String attUrl) {
-        CardAttachment att = tWrapper.createCardUrlAttachment(idCard, attName, attUrl);
-        StringBuilder sb = new StringBuilder();
-        sb.append("Attatchment created:").append("\n");
-        sb.append("\t").append("id: ").append(att.getId()).append("\n");
-        sb.append("\t").append("name: ").append(att.getName()).append("\n");
-        sb.append("\t").append("url: ").append(att.getUrl());
-        log.info(sb.toString());
+    public CardAttachment attachLink(String cardId, String url, String apiKey, String apiToken) {
+        return trelloClient.addAttachment(cardId, TrelloRequest.builder()
+                .url(url)
+                .name("Link")
+                .apiKey(apiKey)
+                .apiToken(apiToken)
+                .build());
     }
 
     private Checklist createChecklistForCard(final TrelloApiWrapper tWrapper, final String idCard, final String name) {
