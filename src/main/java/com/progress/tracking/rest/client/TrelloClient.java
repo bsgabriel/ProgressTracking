@@ -29,6 +29,14 @@ public interface TrelloClient {
     Card createCard(@RequestBody TrelloRequest trelloRequest);
 
     @PostMapping("/cards/{cardId}/attachments")
-    CardAttachment addAttachment(@PathVariable("cardId")String cardId,
+    CardAttachment addAttachment(@PathVariable("cardId") String cardId,
                                  @RequestBody TrelloRequest trelloRequest);
+
+    @PostMapping("/checklists")
+    Checklist createChecklist(@RequestBody TrelloRequest trelloRequest);
+
+    @PostMapping("checklists/{checklistId}/checkItems")
+    ChecklistItem createChecklistItem(@PathVariable("checklistId") String checklistId,
+                                      @RequestBody TrelloRequest trelloRequest);
+
 }

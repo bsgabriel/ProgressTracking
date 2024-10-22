@@ -2,7 +2,6 @@ package com.progress.tracking.rest.service;
 
 import com.progress.tracking.rest.client.TrelloClient;
 import com.progress.tracking.rest.dto.ChapterDTO;
-import com.progress.tracking.wrapper.trello.TrelloApiWrapper;
 import com.progress.tracking.wrapper.trello.pojo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,29 +56,22 @@ public class TrelloService {
                 .build());
     }
 
-    private Checklist createChecklistForCard(final TrelloApiWrapper tWrapper, final String idCard, final String name) {
-        Checklist lst = tWrapper.createChecklist(idCard, name);
-        StringBuilder sb = new StringBuilder();
-        sb.append("Checklist created:").append("\n");
-        sb.append("\t").append("id: ").append(lst.getId()).append("\n");
-        sb.append("\t").append("name: ").append(lst.getName()).append("\n");
-        sb.append("\t").append("card's ID: ").append(lst.getIdCard()).append("\n");
-        sb.append("\t").append("board's ID: ").append(lst.getIdBoard()).append("\n");
-        sb.append("\t").append("items: ").append(lst.getItems());
-        log.info(sb.toString());
-
-        return lst;
+    private Checklist createChecklistForCard(String idCard, String name, String apiKey, String apiToken) {
+        return trelloClient.createChecklist(TrelloRequest.builder()
+                .idCard(idCard)
+                .name(name)
+                .apiKey(apiKey)
+                .apiToken(apiToken)
+                .build());
     }
 
-    private void createItemForChecklist(final TrelloApiWrapper tWrapper, final String idChecklist, final String name, final Integer idx) {
-        ChecklistItem item = tWrapper.createChecklistItem(idChecklist, name, idx);
-        StringBuilder sb = new StringBuilder();
-        sb.append("Checklist item created:").append("\n");
-        sb.append("\t").append("id: ").append(item.getId()).append("\n");
-        sb.append("\t").append("name: ").append(item.getName()).append("\n");
-        sb.append("\t").append("checklist's ID: ").append(item.getIdChecklist()).append("\n");
-        sb.append("\t").append("index: ").append(idx);
-        log.info(sb.toString());
+    private void createItemForChecklist(String idChecklist, final String name, final Integer idx, String apiKey, String apiToken) {
+        trelloClient.createChecklistItem(idChecklist, TrelloRequest.builder()
+                .position(idx)
+                .name(name)
+                .apiKey(apiKey)
+                .apiToken(apiToken)
+                .build());
     }
 
     public TrelloList searchListFromBoard(String idBoard, String listName, String apiKey, String apiToken) {
@@ -96,20 +88,29 @@ public class TrelloService {
 
     }
 
-    public void createChecklists(final TrelloApiWrapper tWrapper, final List<ChapterDTO> chapters, final Card card) {
+    public void createChecklists(List<ChapterDTO> chapters, Card card, String apiKey, String apiToken) {
         for (ChapterDTO chapter : chapters) {
             final List<String> lessons = chapter.getLessons();
             if (lessons == null || lessons.isEmpty())
                 continue;
 
-            final Checklist checkList = this.createChecklistForCard(tWrapper, card.getId(), chapter.getName());
+            final Checklist checkList = this.createChecklistForCard(card.getId(), chapter.getName(), apiKey, apiToken);
             final int lessonsPerThread = (int) Math.ceil((double) lessons.size() / MAX_THREADS);
             final CountDownLatch latch = new CountDownLatch(MAX_THREADS);
 
             for (int threadId = 0; threadId < MAX_THREADS; threadId++) {
                 final int start = threadId * lessonsPerThread;
                 final int end = Math.min((threadId + 1) * lessonsPerThread, lessons.size());
-                this.taskExecutor.submit(() -> submit(start, end, tWrapper, latch, checkList.getId(), lessons));
+                this.taskExecutor.submit(() -> {
+                    try {
+                        for (int lectureIndex = start; lectureIndex < end; lectureIndex++) {
+                            String lecture = lessons.get(lectureIndex);
+                            this.createItemForChecklist(checkList.getId(), lecture, lectureIndex + 1, apiKey, apiToken);
+                        }
+                    } finally {
+                        latch.countDown();
+                    }
+                });
             }
 
             try {
@@ -117,17 +118,6 @@ public class TrelloService {
             } catch (InterruptedException e) {
                 log.error("Error while creating checklist item", e);
             }
-        }
-    }
-
-    private void submit(final int start, final int end, final TrelloApiWrapper tWrapper, final CountDownLatch latch, final String checkListId, final List<String> lessons) {
-        try {
-            for (int lectureIndex = start; lectureIndex < end; lectureIndex++) {
-                String lecture = lessons.get(lectureIndex);
-                this.createItemForChecklist(tWrapper, checkListId, lecture, lectureIndex + 1);
-            }
-        } finally {
-            latch.countDown();
         }
     }
 }
