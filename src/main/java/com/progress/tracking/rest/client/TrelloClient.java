@@ -17,8 +17,8 @@ public interface TrelloClient {
     @PostMapping("/boards")
     Board createBoard(@RequestBody TrelloRequest trelloRequest);
 
-    @GetMapping("/list")
-    List<TrelloList> getListsFromBoard(@RequestParam("boardId") String boardId,
+    @GetMapping("/boards/{id}/lists")
+    List<TrelloList> getListsFromBoard(@PathVariable("id") String boardId,
                                        @RequestParam("token") String apiToken,
                                        @RequestParam("key") String apiKey);
 
