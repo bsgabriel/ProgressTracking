@@ -2,7 +2,7 @@ package com.progress.tracking.rest.service;
 
 import com.progress.tracking.rest.client.TrelloClient;
 import com.progress.tracking.rest.dto.ChapterDTO;
-import com.progress.tracking.wrapper.trello.pojo.*;
+import com.progress.tracking.rest.dto.trello.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;

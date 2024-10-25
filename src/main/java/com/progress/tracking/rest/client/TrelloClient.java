@@ -1,6 +1,6 @@
 package com.progress.tracking.rest.client;
 
-import com.progress.tracking.wrapper.trello.pojo.*;
+import com.progress.tracking.rest.dto.trello.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

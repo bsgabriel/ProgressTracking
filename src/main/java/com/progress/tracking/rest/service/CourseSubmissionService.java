@@ -1,10 +1,10 @@
 package com.progress.tracking.rest.service;
 
+import com.progress.tracking.rest.dto.trello.Board;
+import com.progress.tracking.rest.dto.trello.Card;
+import com.progress.tracking.rest.dto.trello.TrelloList;
 import com.progress.tracking.rest.request.CourseToTrelloRequest;
 import com.progress.tracking.rest.response.CourseToTrelloResponse;
-import com.progress.tracking.wrapper.trello.pojo.Board;
-import com.progress.tracking.wrapper.trello.pojo.Card;
-import com.progress.tracking.wrapper.trello.pojo.TrelloList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
