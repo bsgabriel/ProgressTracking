@@ -35,7 +35,7 @@ public interface TrelloClient {
     @PostMapping("/checklists")
     Checklist createChecklist(@RequestBody TrelloRequest trelloRequest);
 
-    @PostMapping("checklists/{checklistId}/checkItems")
+    @PostMapping("/checklists/{checklistId}/checkItems")
     ChecklistItem createChecklistItem(@PathVariable("checklistId") String checklistId,
                                       @RequestBody TrelloRequest trelloRequest);
 
