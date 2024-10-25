@@ -75,7 +75,7 @@ public class TrelloService {
     }
 
     public TrelloList searchListFromBoard(String idBoard, String listName, String apiKey, String apiToken) {
-        return trelloClient.getListsFromBoard(idBoard, apiKey, apiToken)
+        return trelloClient.getListsFromBoard(idBoard, apiToken, apiKey)
                 .stream()
                 .filter(list -> list.getName().equalsIgnoreCase(listName))
                 .findFirst()
