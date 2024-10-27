@@ -65,7 +65,7 @@ public class TrelloService {
                 .build());
     }
 
-    private void createItemForChecklist(String idChecklist, final String name, final Integer idx, String apiKey, String apiToken) {
+    private void createItemForChecklist(String idChecklist, String name, Integer idx, String apiKey, String apiToken) {
         trelloClient.createChecklistItem(idChecklist, TrelloRequest.builder()
                 .position(idx)
                 .name(name)
