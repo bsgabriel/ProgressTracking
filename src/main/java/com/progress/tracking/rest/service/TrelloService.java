@@ -9,7 +9,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.*;
 
 @Slf4j
 @Service
@@ -90,34 +90,40 @@ public class TrelloService {
 
     public void createChecklists(List<ChapterDTO> chapters, Card card, String apiKey, String apiToken) {
         for (ChapterDTO chapter : chapters) {
-            final List<String> lessons = chapter.getLessons();
+            List<String> lessons = chapter.getLessons();
             if (lessons == null || lessons.isEmpty())
                 continue;
 
-            final Checklist checkList = this.createChecklistForCard(card.getId(), chapter.getName(), apiKey, apiToken);
-            final int lessonsPerThread = (int) Math.ceil((double) lessons.size() / MAX_THREADS);
-            final CountDownLatch latch = new CountDownLatch(MAX_THREADS);
+            Checklist checklist = this.createChecklistForCard(card.getId(), chapter.getName(), apiKey, apiToken);
+            int totalLessons = lessons.size();
+            int threadCount = Math.min(totalLessons, MAX_THREADS);
+            ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+            CompletionService<Void> completionService = new ExecutorCompletionService<>(executor);
 
-            for (int threadId = 0; threadId < MAX_THREADS; threadId++) {
-                final int start = threadId * lessonsPerThread;
-                final int end = Math.min((threadId + 1) * lessonsPerThread, lessons.size());
-                this.taskExecutor.submit(() -> {
+            for (int i = 0; i < totalLessons; i++) {
+                String lesson = lessons.get(i);
+                int lessonIndex = i + 1;
+
+                completionService.submit(() -> {
                     try {
-                        for (int lectureIndex = start; lectureIndex < end; lectureIndex++) {
-                            String lecture = lessons.get(lectureIndex);
-                            this.createItemForChecklist(checkList.getId(), lecture, lectureIndex + 1, apiKey, apiToken);
-                        }
-                    } finally {
-                        latch.countDown();
+                        this.createItemForChecklist(checklist.getId(), lesson, lessonIndex, apiKey, apiToken);
+                    } catch (Exception e) {
+                        log.error("Failed to create checklist item for lesson: {} (index: {})", lesson, lessonIndex, e);
+                        throw e;
                     }
+                    return null;
                 });
             }
 
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                log.error("Error while creating checklist item", e);
+            for (int i = 0; i < totalLessons; i++) {
+                try {
+                    completionService.take().get();
+                } catch (InterruptedException | ExecutionException e) {
+                    log.error("Error while processing checklist items", e);
+                }
             }
+
+            executor.shutdown();
         }
     }
 }
