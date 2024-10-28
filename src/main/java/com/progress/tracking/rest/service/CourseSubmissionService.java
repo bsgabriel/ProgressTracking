@@ -16,9 +16,9 @@ public class CourseSubmissionService {
     private TrelloService trelloExec;
 
     public CourseToTrelloResponse submitToTrello(@RequestBody CourseToTrelloRequest req) {
-        final Board board = this.trelloExec.searchBoardByName(req.getBoardName(), req.getBoardDescription(), req.getTrelloApiKey(), req.getTrelloApiToken());
-        final TrelloList list = this.trelloExec.searchListFromBoard(board.getId(), req.getListName(), req.getTrelloApiKey(), req.getTrelloApiToken());
-        final Card card = this.trelloExec.createTrelloCard(list.getId(), req.getCourse().getName(), req.getCourse().getDesc(), req.getTrelloApiKey(), req.getTrelloApiToken());
+        Board board = this.trelloExec.searchBoardByName(req.getBoardName(), req.getBoardDescription(), req.getTrelloApiKey(), req.getTrelloApiToken());
+        TrelloList list = this.trelloExec.searchListFromBoard(board.getId(), req.getListName(), req.getTrelloApiKey(), req.getTrelloApiToken());
+        Card card = this.trelloExec.createTrelloCard(list.getId(), req.getCourse().getName(), req.getCourse().getDesc(), req.getTrelloApiKey(), req.getTrelloApiToken());
         this.trelloExec.attachLink(card.getId(), req.getCourse().getUrl(), req.getTrelloApiKey(), req.getTrelloApiToken());
         this.trelloExec.createChecklists(req.getCourse().getChapters(), card, req.getTrelloApiKey(), req.getTrelloApiToken());
 
