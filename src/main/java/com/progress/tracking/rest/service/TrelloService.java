@@ -5,7 +5,6 @@ import com.progress.tracking.rest.dto.ChapterDTO;
 import com.progress.tracking.rest.dto.trello.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,9 +18,6 @@ public class TrelloService {
 
     @Autowired
     private TrelloClient trelloClient;
-
-    @Autowired
-    private ThreadPoolTaskExecutor taskExecutor;
 
     public Board searchBoardByName(String boardName, String description, String apiKey, String apiToken) {
         return trelloClient.searchBoardByName(boardName, apiToken, apiKey).getBoards()
