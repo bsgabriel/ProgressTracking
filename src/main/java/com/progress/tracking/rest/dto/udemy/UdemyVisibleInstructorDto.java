@@ -1,6 +1,6 @@
 package com.progress.tracking.rest.dto.udemy;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,10 +11,10 @@ public class UdemyVisibleInstructorDto {
     private String title;
     private String name;
 
-    @SerializedName("display_name")
+    @JsonProperty("display_name")
     private String displayName;
 
-    @SerializedName("job_title")
+    @JsonProperty("job_title")
     private String jobTitle;
 
     private String initials;
