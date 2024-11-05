@@ -1,6 +1,6 @@
 package com.progress.tracking.rest.dto.udemy;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,23 +10,23 @@ import java.util.List;
 @Builder
 public class UdemyResultDto {
 
-    @SerializedName("_class")
+    @JsonProperty("_class")
     private String type;
     private Integer id;
 
-    @SerializedName("sort_order")
+    @JsonProperty("sort_order")
     private Integer sortOrder;
 
     private String title;
     private String description;
 
-    @SerializedName("visible_instructors")
+    @JsonProperty("visible_instructors")
     private List<UdemyVisibleInstructorDto> visibleInstructors;
 
     private String url;
     private String headline;
 
-    @SerializedName("image_480x270")
+    @JsonProperty("image_480x270")
     private String image;
 
     @Override
